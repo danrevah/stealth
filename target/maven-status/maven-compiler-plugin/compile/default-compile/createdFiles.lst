@@ -1,1 +1,7 @@
+com/openu/security/tor/app/Client.class
+com/openu/security/tor/app/App$1.class
+com/openu/security/tor/app/Service.class
+com/openu/security/tor/app/Relay.class
+com/openu/security/tor/app/TrustedServer.class
+com/openu/security/tor/app/ServicNames.class
 com/openu/security/tor/app/App.class

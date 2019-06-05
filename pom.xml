@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.openu.security.tor.app</groupId>
-  <artifactId>my-app</artifactId>
+  <artifactId>encrypted-proxy</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <name>my-app</name>

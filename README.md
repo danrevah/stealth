@@ -5,17 +5,17 @@ Emulating an encrypted tunnel using relays (Based on TOR concept).
 ## Install
 
 ```sh 
-$ bin/install
+$ bin/install.sh
 ```
 
 ## Compile
 
 ```sh 
-$ bin/compile
+$ bin/compile.sh
 ```
 
 ## Run
 
 ```sh 
-$ bin/run
+$ ./bin/proxy 
 ```
