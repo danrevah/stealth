@@ -1,18 +1,24 @@
 package com.openu.security.tor.app.Services.Relay;
 
+import com.openu.security.tor.app.Logger.LogLevel;
 import com.openu.security.tor.app.Services.Service;
+import com.openu.security.tor.app.Logger.Logger;
 
 public class Relay implements Service {
 
-    public void execute(int instanceAmount, boolean verbose) {
+    private int instanceAmount;
+
+    public Relay(int instanceAmount) throws Exception {
+        this.instanceAmount = instanceAmount;
+    }
+
+    public void execute() throws Exception {
         if (instanceAmount < 1 || instanceAmount > 10) {
-            System.out.println("Relay instances in parallel must be in range of 1-10.");
+            Logger.log(LogLevel.Error, "Relay instances in parallel must be in range of 1-10.");
             return;
         }
 
-        if (verbose) {
-            System.out.println("Launching " + instanceAmount + " relays..");
-        }
+        Logger.log(LogLevel.Info, "Launching " + instanceAmount + " relays..");
 
         // @TODO: Start from client!!! has many things in common!
 

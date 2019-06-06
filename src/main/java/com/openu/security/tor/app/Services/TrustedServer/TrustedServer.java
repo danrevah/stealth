@@ -1,12 +1,20 @@
 package com.openu.security.tor.app.Services.TrustedServer;
 
+import com.openu.security.tor.app.Logger.LogLevel;
+import com.openu.security.tor.app.Logger.Logger;
 import com.openu.security.tor.app.Services.Service;
 
 public class TrustedServer implements Service {
 
-    public void execute(int instanceAmount, boolean verbose) {
+    private int instanceAmount;
+
+    public TrustedServer(int instanceAmount) throws Exception {
+        this.instanceAmount = instanceAmount;
+    }
+
+    public void execute() throws Exception {
         if (instanceAmount != 1) {
-            System.out.println("TrustedServer service cannot be executed in parallel mode.");
+            Logger.log(LogLevel.Error, "TrustedServer service cannot be executed in parallel mode.");
             return;
         }
 

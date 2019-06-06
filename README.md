@@ -9,8 +9,9 @@ This is hardcoded into the client & relays in order to prevent MITM attacks.
 
 ```java
 public class Config {
-    public final static String TRUSTED_SERVER = "127.0.0.1";
-    final static public String PUBLIC_KEY = "...";
+    public final static String TRUSTED_SERVER_HOST = "127.0.0.1";
+    public final static String TRUSTED_SERVER_PORT = "3000";
+    final static public String TRUSTED_SERVER_PUBLIC_KEY = "...";
 
 }
 ```
@@ -44,3 +45,9 @@ $ ./bin/proxy
 Since the private-key is hardcoded and the client and relay jar's should not have access to this information.
 
 2. Private & Public key is included in this repository which is not safe to use, generation of a new key pair is required.
+
+## TODO
+
+1. Warnings must be taken care of
+
+2. TrustedServer should ping relays every X seconds to validate is alive.
