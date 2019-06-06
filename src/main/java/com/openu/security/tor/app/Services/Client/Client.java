@@ -23,4 +23,7 @@ public class Client implements Service {
 
         // @TOOD: Next: TrustedServer, since relay is very depdended on it also..
     }
+
+    private void sendRequest() {
+    }
 }

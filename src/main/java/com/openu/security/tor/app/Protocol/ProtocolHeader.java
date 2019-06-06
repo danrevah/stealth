@@ -1,4 +1,4 @@
-package com.openu.security.tor.app;
+package com.openu.security.tor.app.Protocol;
 
 /**
  * Encrypted proxy protocol
@@ -14,10 +14,20 @@ package com.openu.security.tor.app;
  *                 sends back: RESPONSE
  *                 sends: ADD_RELAY, HTTP_GET_REQUEST
  */
-public class Protocol {
-    public static final String GET_RELAYS = "GET_RELAYS";
-    public static final String HTTP_GET_REQUEST = "HTTP_GET_REQUEST";
-    public static final String ADD_RELAY = "ADD_RELAY";
-    public static final String RELAY = "RELAY";
-    public static final String RESPONSE = "RESPONSE";
+public enum ProtocolHeader {
+    GET_RELAYS("GET_RELAYS"),
+    HTTP_GET_REQUEST("HTTP_GET_REQUEST"),
+    ADD_RELAY("ADD_RELAY"),
+    RELAY("RELAY"),
+    RESPONSE("RESPONSE");
+
+    private final String name;
+
+    private ProtocolHeader(String header) {
+        this.name = header;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

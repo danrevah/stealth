@@ -12,6 +12,7 @@ public class TrustedServer implements Service {
 
         // @TODO: Start from client!!! has many things in common!
 
+        // @TODO: Implement server: https://www.pegaxchange.com/2017/12/07/simple-tcp-ip-server-client-java/
         // @TODO: 1. Create method to handle trusted server requests
         // @TODO: 2. Recieve `Protocol.ADD_RELAY` with `IP:PORT` + `PUBLIC KEY` and add to a list of relays.
         // @TODO: 3. Public-Key + IP/PORT of TrustedServer should be pre-configured in Relays & Client in order to prevent
