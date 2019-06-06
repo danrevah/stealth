@@ -22,7 +22,6 @@ public class Relay implements Service {
 
         // @TODO: Start from client!!! has many things in common!
 
-        // @TODO: 1. On startup send 'Protocol.ADD_RELAY' to the trusted server
         // @TODO: 2. Use threads to run this function multiple times.. with different ports (randomized)!
         // @TODO: 3. Listen to connections in-case of `HTTP_GET_REQUEST` decrypt
         //           If no more encrypted messages -> make GET Request to server
