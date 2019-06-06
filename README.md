@@ -14,6 +14,12 @@ $ mvn install
 $ mvn clean compile assembly:single
 ```
 
+## Run tests
+
+```sh 
+$ mvn test
+```
+
 ## Run
 
 ```sh 

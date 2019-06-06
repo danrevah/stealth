@@ -10,8 +10,6 @@ public class Client implements Service {
             return;
         }
 
-        // @TODO: Start from public encryption with tests!! use mvn-test there's already a lib there nad it works!
-
         // @TODO: 1. Create method to handle client requests
         // @TODO: 2. Create socket helper library to make connectios
         // @TODO: 3. IP/PORT of TrustedServer should be pre-configured in Relays & Client in order to prevent MITM
