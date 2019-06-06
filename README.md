@@ -5,13 +5,13 @@ Emulating an encrypted tunnel using relays (Based on TOR concept).
 ## Install
 
 ```sh 
-$ bin/install.sh
+$ mvn install
 ```
 
 ## Compile
 
 ```sh 
-$ bin/compile.sh
+$ mvn clean compile assembly:single
 ```
 
 ## Run
