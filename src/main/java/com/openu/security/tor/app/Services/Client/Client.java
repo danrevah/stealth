@@ -1,4 +1,6 @@
-package com.openu.security.tor.app;
+package com.openu.security.tor.app.Services.Client;
+
+import com.openu.security.tor.app.Services.Service;
 
 public class Client implements Service {
 

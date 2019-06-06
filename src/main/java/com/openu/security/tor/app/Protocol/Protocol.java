@@ -15,9 +15,9 @@ package com.openu.security.tor.app;
  *                 sends: ADD_RELAY, HTTP_GET_REQUEST
  */
 public class Protocol {
-    public static final String GET_RELAYS = 'GET_RELAYS';
-    public static final String HTTP_GET_REQUEST = 'HTTP_GET_REQUEST';
-    public static final String ADD_RELAY = 'ADD_RELAY';
-    public static final String RELAY = 'RELAY';
-    public static final String RESPONSE = 'RESPONSE';
+    public static final String GET_RELAYS = "GET_RELAYS";
+    public static final String HTTP_GET_REQUEST = "HTTP_GET_REQUEST";
+    public static final String ADD_RELAY = "ADD_RELAY";
+    public static final String RELAY = "RELAY";
+    public static final String RESPONSE = "RESPONSE";
 }

@@ -1,4 +1,6 @@
-package com.openu.security.tor.app;
+package com.openu.security.tor.app.Services.TrustedServer;
+
+import com.openu.security.tor.app.Services.Service;
 
 public class TrustedServer implements Service {
 

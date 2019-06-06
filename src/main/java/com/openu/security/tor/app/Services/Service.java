@@ -1,5 +1,5 @@
-package com.openu.security.tor.app;
+package com.openu.security.tor.app.Services;
 
-interface Service {
+public interface Service {
     void execute(int instanceAmount, boolean verbose);
 }

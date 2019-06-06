@@ -1,10 +1,13 @@
 package com.openu.security.tor.app;
 
+import com.openu.security.tor.app.Services.Client.Client;
+import com.openu.security.tor.app.Services.Relay.Relay;
+import com.openu.security.tor.app.Services.TrustedServer.TrustedServer;
 import picocli.CommandLine;
 import picocli.CommandLine.*;
-import java.io.File;
+import com.openu.security.tor.app.Services.*;
 
-enum ServicNames { Relay, TrustedServer, Client }
+enum ServiceNames { Relay, TrustedServer, Client }
 
 @Command(name = "proxy", mixinStandardHelpOptions = true, version = "Encrypted proxy 1.0")
 public class App implements Runnable {
@@ -15,7 +18,7 @@ public class App implements Runnable {
     private boolean verbose = false;
 
     @Parameters(arity = "1", paramLabel = "SERVICE", description = "Service types: ${COMPLETION-CANDIDATES}.")
-    private ServicNames serviceName = null;
+    private ServiceNames serviceName = null;
 
     @Option(
             names = { "-p", "--parallel" },

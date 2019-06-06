@@ -1,4 +1,6 @@
-package com.openu.security.tor.app;
+package com.openu.security.tor.app.Services.Relay;
+
+import com.openu.security.tor.app.Services.Service;
 
 public class Relay implements Service {
 
