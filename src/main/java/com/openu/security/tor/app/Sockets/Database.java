@@ -3,7 +3,7 @@ package com.openu.security.tor.app.Sockets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListenerDatabase {
+public class Database {
 
     private static List<ServerDetails> relays = new ArrayList<>();
 

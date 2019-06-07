@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.security.Key;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +43,20 @@ public class ClientSocket {
             DatatypeConverter.printBase64Binary(publicKey.getEncoded())
         ));
 
-        this.send(packet, true);
+        String relaysPacket = this.send(packet, true);
+
+        for (String row : relaysPacket.split("\n")) {
+            String[] splitted = row.split(" ");
+
+            if (splitted.length != 4) {
+                continue;
+            }
+
+            // @TODO: Instance creeation can be avoided..
+            KeyPairs keyPairs = new KeyPairs();
+            keyPairs.setPublicKeyFromBase64(splitted[3]);
+            Database.addRelay(new ServerDetails(splitted[1], Integer.valueOf(splitted[2]), keyPairs.getPublicKey()));
+        }
     }
 
     public void addRelay(int port, PublicKey publicKey) throws Exception {
@@ -62,13 +76,17 @@ public class ClientSocket {
         return packet;
     }
 
-    private void send(String packet, boolean recieveBack) throws Exception {
+    private String send(String packet, boolean recieveBack) throws Exception {
         InputStream is = socket.getInputStream();
         InputStreamReader isr = new InputStreamReader(is);
         BufferedReader br = new BufferedReader(isr);
         PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
+
+        Logger.info("<Encrypting>");
         String encryptedConcat = PublicEncryption.encryptChunks(packet, hostPublicKey);
-        Logger.info("<Encrypted packet being sent ...>");
+        Logger.info("<Encrypted Packet> " + encryptedConcat);
+
+        Logger.info("<Sending packet ...>");
         out.println(encryptedConcat);
         out.flush();
 
@@ -77,6 +95,9 @@ public class ClientSocket {
             Logger.info("<Received back>: " + message);
             String decrypted = PublicEncryption.decryptChunks(message, keyPairs.getPrivateKey());
             Logger.info("<Decrypted>: " + decrypted);
+            return decrypted;
         }
+
+        return "";
     }
 }

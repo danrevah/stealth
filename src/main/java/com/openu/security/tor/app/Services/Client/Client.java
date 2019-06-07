@@ -46,9 +46,8 @@ public class Client implements Service {
 
             // Send get Relays
             this.clientSocket.getRelays(chainLength, keyPairs.getPublicKey());
-            // @TODO: 1. Return relays from TrustedServer when recieved GET_RELAYS with chainLength
-            // @TODO: 2. Write a method that builds a chain of encrypted messages and sends to Relay! with `Protocol.HTTP_GET_REQUEST`
-            // @TODO: 3. Send encrypted message to relay
+            // @TODO: 1. Write a method that builds a chain of encrypted messages and sends to Relay! with `Protocol.HTTP_GET_REQUEST`
+            // @TODO: 2. Send encrypted message to relay
 
 
             // @TODO: NEXT: Move to relay service and continue the work!

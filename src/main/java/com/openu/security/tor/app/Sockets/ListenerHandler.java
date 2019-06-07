@@ -66,7 +66,7 @@ public class ListenerHandler implements Runnable {
             KeyPairs keyPairPub = new KeyPairs();
             keyPairPub.setPublicKeyFromBase64(chunks[3]);
 
-            ListenerDatabase.addRelay(new ServerDetails(host, port, keyPairPub.getPublicKey()));
+            Database.addRelay(new ServerDetails(host, port, keyPairPub.getPublicKey()));
         }
 
         if (header.equals(ProtocolHeader.GET_RELAYS.getName())) {
@@ -76,7 +76,7 @@ public class ListenerHandler implements Runnable {
             BufferedOutputStream bos = new BufferedOutputStream(clientSocket.getOutputStream());
             OutputStreamWriter os = new OutputStreamWriter(bos, "US-ASCII");
 
-            List<ServerDetails> relaysArr = ListenerDatabase.getRelays();
+            List<ServerDetails> relaysArr = Database.getRelays();
             ArrayList<String> relays = new ArrayList<>();
             Logger.info("Total Relays: " + relaysArr.size());
 

@@ -1,4 +1,4 @@
-#  OpenU Project
+#  Stealth Project
 
 Emulating an encrypted tunnel using relays (Based on TOR concept).
 
@@ -51,3 +51,5 @@ Since the private-key is hardcoded and the client and relay jar's should not hav
 1. Warnings must be taken care of
 
 2. TrustedServer should ping relays every X seconds to validate is alive.
+
+3. "@TODO" leftovers should also be taken care of
