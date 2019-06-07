@@ -35,8 +35,8 @@ public class ClientSocket {
         hostPublicKey = publicOnlyKeyPair.getPublicKey();
     }
 
-    public void getRelays() throws Exception {
-        String packet = buildPacket(ProtocolHeader.GET_RELAYS, new ArrayList<String>());
+    public void getRelays(int chainLength) throws Exception {
+        String packet = buildPacket(ProtocolHeader.GET_RELAYS, new ArrayList<String>(chainLength));
         this.send(packet, true);
     }
 

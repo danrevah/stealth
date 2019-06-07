@@ -19,7 +19,7 @@ public class TrustedServer implements Service {
         KeyPairs keyPairs = new KeyPairs();
         keyPairs.setPrivateKeyFromBase64(Keys.PRIVATE_KEY);
 
-        this.server = new ListenerSocket("127.0.0.1", Config.TRUSTED_SERVER_PORT, keyPairs.getPrivateKey());
+        this.server = new ListenerSocket("0.0.0.0", Config.TRUSTED_SERVER_PORT, keyPairs.getPrivateKey());
         Logger.info("TrustedServer listening for connections...");
     }
 
@@ -29,7 +29,7 @@ public class TrustedServer implements Service {
             return;
         }
 
-        while(true) {
+        while (true) {
             this.server.listen();
         }
     }

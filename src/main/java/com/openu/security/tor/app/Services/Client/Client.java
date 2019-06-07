@@ -38,11 +38,10 @@ public class Client implements Service {
             System.out.print("URL for HTTP Get request (CTRL+C to stop): ");
             input = scanner.nextLine();
 
-            // @TODO: validate HTTP and not HTTPS?
             // @TODO: validate URL?
 
             // Send get Relays
-            this.clientSocket.getRelays();
+            this.clientSocket.getRelays(chainLength);
             // @TODO: 1. Return relays from TrustedServer when recieved GET_RELAYS with chainLength
             // @TODO: 2. Write a method that builds a chain of encrypted messages and sends to Relay! with `Protocol.HTTP_GET_REQUEST`
             // @TODO: 3. Send encrypted message to relay
