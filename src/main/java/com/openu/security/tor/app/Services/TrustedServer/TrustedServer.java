@@ -29,6 +29,8 @@ public class TrustedServer implements Service {
             return;
         }
 
-        this.server.listen();
+        while(true) {
+            this.server.listen();
+        }
     }
 }
