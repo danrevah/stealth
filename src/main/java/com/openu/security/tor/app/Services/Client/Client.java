@@ -57,7 +57,7 @@ public class Client implements Service {
 
             String response = relay.send(chain.getEncryptedPacket(), true, true);
 
-            Logger.info("<Chained Response> " + response);
+            System.out.println("Response: " + response);
         }
     }
 }
