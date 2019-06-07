@@ -26,31 +26,28 @@ import java.util.List;
  */
 public class ChainedEncryption {
 
-    public static String chain(int chainLength, String packet) throws Exception {
+    public static ChainedResponse chain(int chainLength, String packet) throws Exception {
         ArrayList<ServerDetails> relays = Database.getRelays();
 
         if (relays.size() < 2) {
             throw new Exception("Chain encryption must incl. at least 2 relays");
         }
 
-        // @TODO: Change this
-        // An exit relay should NOT be taken randomly from the relay list!
-        // There should be a list of predefined relays which are well known, same as the TrustedServer!
-        // This is IMPORTANT in order to response spoofing.
-        ServerDetails exitRelay = relays.get(0);
-
         // @TODO: Extract relays randomly
-        List<ServerDetails> middleRelays = new ArrayList<>(relays.subList(1, chainLength - 1));
-        String encryptedPacket = PublicEncryption.encryptChunks(packet, exitRelay.getPublicKey());
+        List<ServerDetails> middleRelays = relays;
+        String encryptedPacket = packet;
 
-        Logger.info("<Chain Encryption> of: " + packet);
+        Logger.info("<Chain Encryption> Chaining " + chainLength + " relays..");
+
+        int lastIndex = middleRelays.size() - 1;
+        ServerDetails firstRelay = middleRelays.get(lastIndex);
+        middleRelays.remove(lastIndex);
 
         for (ServerDetails relay : middleRelays) {
-            String wrappedPacket = "ROUTE " + relay.getHost() + " " + relay.getPort() + " " + encryptedPacket;
-            Logger.info("<Chain Encryption> of: " + wrappedPacket);
-            encryptedPacket = PublicEncryption.encryptChunks(wrappedPacket, relay.getPublicKey());
+            encryptedPacket = "ROUTE " + relay.getHost() + " " + relay.getPort() + " "
+                    + PublicEncryption.encryptChunks(encryptedPacket, relay.getPublicKey());
         }
 
-        return encryptedPacket;
+        return new ChainedResponse(encryptedPacket, firstRelay);
     }
 }

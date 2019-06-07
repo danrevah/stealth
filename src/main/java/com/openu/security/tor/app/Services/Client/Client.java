@@ -3,29 +3,33 @@ package com.openu.security.tor.app.Services.Client;
 import com.openu.security.tor.app.Logger.LogLevel;
 import com.openu.security.tor.app.Logger.Logger;
 import com.openu.security.tor.app.PublicEncryption.ChainedEncryption;
+import com.openu.security.tor.app.PublicEncryption.ChainedResponse;
 import com.openu.security.tor.app.PublicEncryption.KeyPairs;
 import com.openu.security.tor.app.Services.Config;
 import com.openu.security.tor.app.Services.Service;
 import com.openu.security.tor.app.Sockets.ClientSocket;
 import com.openu.security.tor.app.Sockets.Database;
+import com.openu.security.tor.app.Sockets.ServerDetails;
 
 import java.util.Scanner;
 
 public class Client implements Service {
 
     private int chainLength;
-    private int instanceAmount;
     private ClientSocket clientSocket;
     private Scanner scanner;
     private KeyPairs keyPairs;
 
-    public Client(int instanceAmount, int chainLength) throws Exception {
+    public Client(int chainLength) throws Exception {
         this.chainLength = chainLength;
-        this.instanceAmount = instanceAmount;
+
+        // @TODO: Move converting functions to static or a different class
+        KeyPairs publicOnlyKeyPair = new KeyPairs();
+        publicOnlyKeyPair.setPublicKeyFromBase64(Config.TRUSTED_SERVER_PUBLIC_KEY);
 
         this.keyPairs = new KeyPairs();
         this.keyPairs.generateKeyPair();
-        this.clientSocket = new ClientSocket(Config.TRUSTED_SERVER_HOST, Config.TRUSTED_SERVER_PORT, this.keyPairs);
+        this.clientSocket = new ClientSocket(Config.TRUSTED_SERVER_HOST, Config.TRUSTED_SERVER_PORT, this.keyPairs, publicOnlyKeyPair.getPublicKey());
         this.scanner = new Scanner(System.in);
 
         Logger.log(LogLevel.Info,
@@ -34,10 +38,6 @@ public class Client implements Service {
     }
 
     public void execute() throws Exception {
-        if (instanceAmount != 1) {
-            throw new Exception("Client service cannot be executed in parallel mode.");
-        }
-
         String input;
 
         while (true) {
@@ -49,12 +49,15 @@ public class Client implements Service {
             // Send get Relays
             this.clientSocket.getRelays(chainLength, keyPairs.getPublicKey());
 
-            String chained = ChainedEncryption.chain(chainLength, "HTTP_GET_REQUEST " + input + " " + keyPairs.getPublicKeyAsBase64());
+            ChainedResponse chain = ChainedEncryption.chain(chainLength, "HTTP_GET_REQUEST " + input + " " + keyPairs.getPublicKeyAsBase64());
 
-            System.out.println(chained);
+            ServerDetails relayDetails = chain.getFirstRelay();
+            Logger.info("<Get Request> Sending to initial relay " + relayDetails.getHost() + ":" + relayDetails.getPort());
+            ClientSocket relay = new ClientSocket(relayDetails.getHost(), relayDetails.getPort(), this.keyPairs, relayDetails.getPublicKey());
 
-            // @TODO: 1. Send encrypted message to relay
-            // @TODO: NEXT: Move to relay service and continue the work!
+            String response = relay.send(chain.getEncryptedPacket(), true, true);
+
+            Logger.info("<Chained Response> " + response);
         }
     }
 }

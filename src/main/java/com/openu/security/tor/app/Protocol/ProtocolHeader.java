@@ -19,6 +19,7 @@ public enum ProtocolHeader {
     HTTP_GET_REQUEST("HTTP_GET_REQUEST"),
     ADD_RELAY("ADD_RELAY"),
     RELAY("RELAY"),
+    ROUTE("ROUTE"),
     RESPONSE("RESPONSE");
 
     private final String name;

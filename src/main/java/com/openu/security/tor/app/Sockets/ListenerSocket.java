@@ -1,5 +1,7 @@
 package com.openu.security.tor.app.Sockets;
 
+import com.openu.security.tor.app.Logger.Logger;
+
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -30,6 +32,7 @@ public class ListenerSocket {
             this.clientSocket = this.socket.accept();
 
             ListenerHandler connection = new ListenerHandler(clientSocket, privateKey, host, port);
+            Logger.info("<ListenerSocket> Listening to new connections..");
             new Thread(connection).start();
         }
     }

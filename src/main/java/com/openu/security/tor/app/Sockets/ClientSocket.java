@@ -13,9 +13,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.security.Key;
 import java.security.PublicKey;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,16 +23,10 @@ public class ClientSocket {
     private PublicKey hostPublicKey;
     private KeyPairs keyPairs;
 
-    public ClientSocket(String host, int port, KeyPairs keyPairs) throws Exception {
+    public ClientSocket(String host, int port, KeyPairs keyPairs, PublicKey hostPublicKey) throws Exception {
         this.keyPairs = keyPairs;
         this.socket = new Socket(InetAddress.getByName(host), port);
-
-        // Instance creation used to convert from base64..
-        // @TODO: Move converting functions to static or a different class
-        KeyPairs publicOnlyKeyPair = new KeyPairs();
-        publicOnlyKeyPair.setPublicKeyFromBase64(Config.TRUSTED_SERVER_PUBLIC_KEY);
-
-        hostPublicKey = publicOnlyKeyPair.getPublicKey();
+        this.hostPublicKey = hostPublicKey;
     }
 
     public void getRelays(int chainLength, PublicKey publicKey) throws Exception {
@@ -43,7 +35,7 @@ public class ClientSocket {
             DatatypeConverter.printBase64Binary(publicKey.getEncoded())
         ));
 
-        String relaysPacket = this.send(packet, true);
+        String relaysPacket = this.send(packet, true, true);
 
         for (String row : relaysPacket.split("\n")) {
             String[] splitted = row.split(" ");
@@ -61,12 +53,45 @@ public class ClientSocket {
 
     public void addRelay(int port, PublicKey publicKey) throws Exception {
         String packet = buildPacket(ProtocolHeader.ADD_RELAY, Arrays.asList(
-            InetAddress.getLocalHost().getCanonicalHostName(),
             String.valueOf(port),
             DatatypeConverter.printBase64Binary(publicKey.getEncoded())
         ));
 
-        this.send(packet, false);
+        this.send(packet, false, true);
+    }
+
+    public String send(String packet, boolean recieveBack, boolean encryption) throws Exception {
+        String modifiedPacket = packet;
+
+        if (encryption) {
+            Logger.info("<Encrypting>");
+            modifiedPacket = PublicEncryption.encryptChunks(packet, hostPublicKey);
+            Logger.info("<Encrypted Packet> " + modifiedPacket);
+        }
+
+        InputStream is = socket.getInputStream();
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(isr);
+        PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
+
+        Logger.info("<Sending packet ...>");
+        out.println(modifiedPacket);
+        out.flush();
+
+        if (recieveBack) {
+            String message = br.readLine();
+            Logger.info("<Received back>: " + message);
+
+            if (encryption) {
+                String decrypted = PublicEncryption.decryptChunks(message, keyPairs.getPrivateKey());
+                Logger.info("<Decrypted>: " + decrypted);
+                return decrypted;
+            }
+
+            return message;
+        }
+
+        return "";
     }
 
     // -- Private
@@ -74,30 +99,5 @@ public class ClientSocket {
         String packet = header.getName() + (data.size() > 0 ? (" " + String.join(" ", data)) : "");
         Logger.info("<Packet> " + packet);
         return packet;
-    }
-
-    private String send(String packet, boolean recieveBack) throws Exception {
-        InputStream is = socket.getInputStream();
-        InputStreamReader isr = new InputStreamReader(is);
-        BufferedReader br = new BufferedReader(isr);
-        PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
-
-        Logger.info("<Encrypting>");
-        String encryptedConcat = PublicEncryption.encryptChunks(packet, hostPublicKey);
-        Logger.info("<Encrypted Packet> " + encryptedConcat);
-
-        Logger.info("<Sending packet ...>");
-        out.println(encryptedConcat);
-        out.flush();
-
-        if (recieveBack) {
-            String message = br.readLine();
-            Logger.info("<Received back>: " + message);
-            String decrypted = PublicEncryption.decryptChunks(message, keyPairs.getPrivateKey());
-            Logger.info("<Decrypted>: " + decrypted);
-            return decrypted;
-        }
-
-        return "";
     }
 }

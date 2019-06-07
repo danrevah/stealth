@@ -26,12 +26,6 @@ public class App implements Runnable {
     private ServiceNames serviceName = null;
 
     @Option(
-            names = { "-p", "--parallel" },
-            description = "Amount of instances to run in parallel."
-    )
-    private int instanceAmount = 1;
-
-    @Option(
             names = { "-c", "--chain" },
             description = "Chain length (number of relay's in chain)."
     )
@@ -50,13 +44,13 @@ public class App implements Runnable {
 
             switch (serviceName) {
                 case Relay:
-                    service = new Relay(instanceAmount);
+                    service = new Relay();
                     break;
                 case Client:
-                    service = new Client(instanceAmount, chainLength);
+                    service = new Client(chainLength);
                     break;
                 case TrustedServer:
-                    service = new TrustedServer(instanceAmount);
+                    service = new TrustedServer();
                     break;
 
                 default:
