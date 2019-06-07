@@ -81,7 +81,7 @@ public class ListenerHandler implements Runnable {
             Logger.info("Total Relays: " + relaysArr.size());
 
             for (ServerDetails details : relaysArr) {
-                relays.add(details.getHost() + ":" + details.getPort() + ":" + DatatypeConverter.printBase64Binary(details.getPublicKey().getEncoded()));
+                relays.add(details.getHost() + " " + details.getPort() + " " + DatatypeConverter.printBase64Binary(details.getPublicKey().getEncoded()));
             }
 
             // @TODO: no need instance...
