@@ -23,7 +23,7 @@ public class Relay implements Service {
         this.keyPairs = new KeyPairs();
         this.keyPairs.generateKeyPair();
 
-        this.clientSocket = new ClientSocket(Config.TRUSTED_SERVER_HOST, Config.TRUSTED_SERVER_PORT);
+        this.clientSocket = new ClientSocket(Config.TRUSTED_SERVER_HOST, Config.TRUSTED_SERVER_PORT, this.keyPairs);
         this.serverSocket = new ListenerSocket("127.0.0.1", 0, this.keyPairs.getPrivateKey());
     }
 

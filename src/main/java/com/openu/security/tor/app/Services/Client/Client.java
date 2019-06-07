@@ -2,6 +2,7 @@ package com.openu.security.tor.app.Services.Client;
 
 import com.openu.security.tor.app.Logger.LogLevel;
 import com.openu.security.tor.app.Logger.Logger;
+import com.openu.security.tor.app.PublicEncryption.KeyPairs;
 import com.openu.security.tor.app.Services.Config;
 import com.openu.security.tor.app.Services.Service;
 import com.openu.security.tor.app.Sockets.ClientSocket;
@@ -14,12 +15,15 @@ public class Client implements Service {
     private int instanceAmount;
     private ClientSocket clientSocket;
     private Scanner scanner;
+    private KeyPairs keyPairs;
 
     public Client(int instanceAmount, int chainLength) throws Exception {
         this.chainLength = chainLength;
         this.instanceAmount = instanceAmount;
 
-        this.clientSocket = new ClientSocket(Config.TRUSTED_SERVER_HOST, Config.TRUSTED_SERVER_PORT);
+        this.keyPairs = new KeyPairs();
+        this.keyPairs.generateKeyPair();
+        this.clientSocket = new ClientSocket(Config.TRUSTED_SERVER_HOST, Config.TRUSTED_SERVER_PORT, this.keyPairs);
         this.scanner = new Scanner(System.in);
 
         Logger.log(LogLevel.Info,
@@ -41,7 +45,7 @@ public class Client implements Service {
             // @TODO: validate URL?
 
             // Send get Relays
-            this.clientSocket.getRelays(chainLength);
+            this.clientSocket.getRelays(chainLength, keyPairs.getPublicKey());
             // @TODO: 1. Return relays from TrustedServer when recieved GET_RELAYS with chainLength
             // @TODO: 2. Write a method that builds a chain of encrypted messages and sends to Relay! with `Protocol.HTTP_GET_REQUEST`
             // @TODO: 3. Send encrypted message to relay

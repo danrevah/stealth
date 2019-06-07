@@ -1,7 +1,14 @@
 package com.openu.security.tor.app.PublicEncryption;
 
 import javax.crypto.Cipher;
+import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import com.google.common.base.Joiner;
 
 public class PublicEncryption {
 
@@ -12,6 +19,29 @@ public class PublicEncryption {
         }
 
         return null;
+    }
+
+    public static String encryptChunks(String packet, PublicKey publicKey) {
+        final int CHUNK_SIZE = 200;
+
+        byte[] fullBytes = packet.getBytes();
+
+        ArrayList<String> encryptedChunks = new ArrayList<>();
+
+        // Chunk size 200 since RSA with 2048 bits can only encrypt up to: 2048/11-8 bytes.
+
+        for (int i = 0; i < fullBytes.length; i += CHUNK_SIZE) {
+            encryptedChunks.add(
+                    DatatypeConverter.printBase64Binary(
+                            PublicEncryption.encrypt(
+                                    new String(Arrays.copyOfRange(fullBytes, i, i + CHUNK_SIZE < fullBytes.length ? i + CHUNK_SIZE : fullBytes.length)),
+                                    publicKey
+                            )
+                    )
+            );
+        }
+
+       return Joiner.on("@").join(encryptedChunks);
     }
 
     public static String decrypt(byte[] encrypted, Key privateKey) {
@@ -26,6 +56,17 @@ public class PublicEncryption {
         }
 
         return null;
+    }
+
+    public static String decryptChunks(String data, PrivateKey privateKey) {
+        String[] chunks = data.split("@");
+        String decrypted = "";
+
+        for (String chunk : chunks) {
+            decrypted += PublicEncryption.decrypt(DatatypeConverter.parseBase64Binary(chunk), privateKey);
+        }
+
+        return decrypted;
     }
 
     private static byte[] convert(byte[] data, Key key, int mode) {

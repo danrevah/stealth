@@ -29,7 +29,7 @@ public class ListenerSocket {
         while (true) {
             this.clientSocket = this.socket.accept();
 
-            ListenerHandler connection = new ListenerHandler(clientSocket, privateKey);
+            ListenerHandler connection = new ListenerHandler(clientSocket, privateKey, host, port);
             new Thread(connection).start();
         }
     }

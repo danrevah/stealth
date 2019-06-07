@@ -5,7 +5,6 @@ import com.openu.security.tor.app.Protocol.ProtocolHeader;
 import com.openu.security.tor.app.PublicEncryption.KeyPairs;
 import com.openu.security.tor.app.PublicEncryption.PublicEncryption;
 import com.openu.security.tor.app.Services.Config;
-import com.google.common.base.Joiner;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.BufferedReader;
@@ -23,8 +22,10 @@ public class ClientSocket {
 
     private Socket socket;
     private PublicKey hostPublicKey;
+    private KeyPairs keyPairs;
 
-    public ClientSocket(String host, int port) throws Exception {
+    public ClientSocket(String host, int port, KeyPairs keyPairs) throws Exception {
+        this.keyPairs = keyPairs;
         this.socket = new Socket(InetAddress.getByName(host), port);
 
         // Instance creation used to convert from base64..
@@ -35,8 +36,12 @@ public class ClientSocket {
         hostPublicKey = publicOnlyKeyPair.getPublicKey();
     }
 
-    public void getRelays(int chainLength) throws Exception {
-        String packet = buildPacket(ProtocolHeader.GET_RELAYS, new ArrayList<String>(chainLength));
+    public void getRelays(int chainLength, PublicKey publicKey) throws Exception {
+        String packet = buildPacket(ProtocolHeader.GET_RELAYS, Arrays.asList(
+            "" + chainLength,
+            DatatypeConverter.printBase64Binary(publicKey.getEncoded())
+        ));
+
         this.send(packet, true);
     }
 
@@ -62,28 +67,7 @@ public class ClientSocket {
         InputStreamReader isr = new InputStreamReader(is);
         BufferedReader br = new BufferedReader(isr);
         PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
-        Logger.info("<Encrypting Packet>");
-
-        byte[] fullBytes = packet.getBytes();
-
-        ArrayList<String> encryptedChunks = new ArrayList<>();
-
-        // Chunk size 200 since RSA with 2048 bits can only encrypt up to: 2048/11-8 bytes.
-        final int CHUNK_SIZE = 200;
-
-        for (int i = 0; i < fullBytes.length; i += CHUNK_SIZE) {
-            encryptedChunks.add(
-                DatatypeConverter.printBase64Binary(
-                    PublicEncryption.encrypt(
-                        new String(Arrays.copyOfRange(fullBytes, i, i + CHUNK_SIZE < fullBytes.length ? i + CHUNK_SIZE : fullBytes.length)),
-                        hostPublicKey
-                    )
-                )
-            );
-        }
-
-        String encryptedConcat = Joiner.on("@").join(encryptedChunks);
-
+        String encryptedConcat = PublicEncryption.encryptChunks(packet, hostPublicKey);
         Logger.info("<Encrypted packet being sent ...>");
         out.println(encryptedConcat);
         out.flush();
@@ -91,6 +75,8 @@ public class ClientSocket {
         if (recieveBack) {
             String message = br.readLine();
             Logger.info("<Received back>: " + message);
+            String decrypted = PublicEncryption.decryptChunks(message, keyPairs.getPrivateKey());
+            Logger.info("<Decrypted>: " + decrypted);
         }
     }
 }

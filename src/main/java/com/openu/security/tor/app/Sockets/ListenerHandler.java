@@ -21,9 +21,11 @@ public class ListenerHandler implements Runnable {
     private int port;
     private PrivateKey privateKey;
 
-    public ListenerHandler(Socket clientSocket, PrivateKey privateKey) {
+    public ListenerHandler(Socket clientSocket, PrivateKey privateKey, String host, int port) {
         this.clientSocket = clientSocket;
         this.privateKey = privateKey;
+        this.host = host;
+        this.port = port;
     }
 
     public void run() {
@@ -40,12 +42,7 @@ public class ListenerHandler implements Runnable {
                 Logger.info(data);
                 Logger.info("<Decrypting>");
 
-                String decrypted = "";
-                String[] chunks = data.split("@");
-
-                for (String chunk : chunks) {
-                    decrypted += PublicEncryption.decrypt(DatatypeConverter.parseBase64Binary(chunk), privateKey);
-                }
+                String decrypted = PublicEncryption.decryptChunks(data, privateKey);
 
                 Logger.info("Message: " + decrypted);
                 handleRequests(decrypted);
@@ -74,16 +71,32 @@ public class ListenerHandler implements Runnable {
 
         if (header.equals(ProtocolHeader.GET_RELAYS.getName())) {
             Logger.info("Returned relays!");
+            int relayAmount = Integer.valueOf(chunks[1]);
+            String clientPubKey = chunks[2];
             BufferedOutputStream bos = new BufferedOutputStream(clientSocket.getOutputStream());
             OutputStreamWriter os = new OutputStreamWriter(bos, "US-ASCII");
 
+            List<ServerDetails> relaysArr = ListenerDatabase.getRelays();
             ArrayList<String> relays = new ArrayList<>();
-            Logger.info("Total Relays: " + relays.size());
-            for (ServerDetails details : ListenerDatabase.getRelays()) {
+            Logger.info("Total Relays: " + relaysArr.size());
+
+            for (ServerDetails details : relaysArr) {
                 relays.add(details.getHost() + ":" + details.getPort() + ":" + DatatypeConverter.printBase64Binary(details.getPublicKey().getEncoded()));
             }
 
-            os.write(Joiner.on("@").join(relays) + "\n");
+            // @TODO: no need instance...
+            KeyPairs keyPairs = new KeyPairs();
+            keyPairs.setPublicKeyFromBase64(clientPubKey);
+
+            if (relaysArr.size() > 0) {
+                String returnedPacket = "RELAY " + Joiner.on("\nRELAY ").join(relays);
+                String encryptedPacket = PublicEncryption.encryptChunks(returnedPacket, keyPairs.getPublicKey());
+                os.write(encryptedPacket + "\n");
+            } else {
+                String encryptedPacket = PublicEncryption.encryptChunks("NO_RELAYS", keyPairs.getPublicKey());
+                os.write(encryptedPacket + "\n");
+            }
+
             os.flush();
         }
     }
