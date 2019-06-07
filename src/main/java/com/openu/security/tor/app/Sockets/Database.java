@@ -5,13 +5,13 @@ import java.util.List;
 
 public class Database {
 
-    private static List<ServerDetails> relays = new ArrayList<>();
+    private static ArrayList<ServerDetails> relays = new ArrayList<>();
 
     public static synchronized void addRelay(ServerDetails relay) {
         relays.add(relay);
     }
 
-    public static synchronized List<ServerDetails> getRelays() {
+    public static synchronized ArrayList<ServerDetails> getRelays() {
         return relays;
     }
 }

@@ -7,6 +7,7 @@ import com.openu.security.tor.app.PublicEncryption.KeyPairs;
 import com.openu.security.tor.app.Services.Config;
 import com.openu.security.tor.app.Services.Service;
 import com.openu.security.tor.app.Sockets.ClientSocket;
+import com.openu.security.tor.app.Sockets.Database;
 
 import java.util.Scanner;
 
@@ -48,11 +49,11 @@ public class Client implements Service {
             // Send get Relays
             this.clientSocket.getRelays(chainLength, keyPairs.getPublicKey());
 
-            ChainedEncryption ce = new ChainedEncryption();
-            // @TODO: 1. Write a method that builds a chain of encrypted messages and sends to Relay! with `Protocol.HTTP_GET_REQUEST`
-            // @TODO: 2. Send encrypted message to relay
+            String chained = ChainedEncryption.chain(chainLength, "HTTP_GET_REQUEST " + input + " " + keyPairs.getPublicKeyAsBase64());
 
+            System.out.println(chained);
 
+            // @TODO: 1. Send encrypted message to relay
             // @TODO: NEXT: Move to relay service and continue the work!
         }
     }
