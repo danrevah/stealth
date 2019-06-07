@@ -2,6 +2,7 @@ package com.openu.security.tor.app.Services.Client;
 
 import com.openu.security.tor.app.Logger.LogLevel;
 import com.openu.security.tor.app.Logger.Logger;
+import com.openu.security.tor.app.PublicEncryption.ChainedEncryption;
 import com.openu.security.tor.app.PublicEncryption.KeyPairs;
 import com.openu.security.tor.app.Services.Config;
 import com.openu.security.tor.app.Services.Service;
@@ -46,6 +47,8 @@ public class Client implements Service {
 
             // Send get Relays
             this.clientSocket.getRelays(chainLength, keyPairs.getPublicKey());
+
+            ChainedEncryption ce = new ChainedEncryption();
             // @TODO: 1. Write a method that builds a chain of encrypted messages and sends to Relay! with `Protocol.HTTP_GET_REQUEST`
             // @TODO: 2. Send encrypted message to relay
 
