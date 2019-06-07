@@ -4,12 +4,11 @@ import com.openu.security.tor.app.Logger.Logger;
 import com.openu.security.tor.app.Protocol.ProtocolHeader;
 import com.openu.security.tor.app.PublicEncryption.KeyPairs;
 import com.openu.security.tor.app.PublicEncryption.PublicEncryption;
+import com.google.common.base.Joiner;
 
 import javax.xml.bind.DatatypeConverter;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
+import javax.xml.crypto.Data;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -63,9 +62,9 @@ public class ListenerSocket {
 
     private void handleRequests(String packet) throws Exception {
         String[] chunks = packet.split(" ");
-        String header = chunks[0];
+        String header = chunks[0].replace(" ", "");
 
-        if (header.equals(ProtocolHeader.ADD_RELAY.getName()) && chunks.length == 4) {
+        if (header.equals(ProtocolHeader.ADD_RELAY.getName())) {
             String host = chunks[1];
 
             int port = Integer.valueOf(chunks[2]);
@@ -77,9 +76,16 @@ public class ListenerSocket {
 
         if (header.equals(ProtocolHeader.GET_RELAYS.getName())) {
             Logger.info("Returned relays!");
-            ObjectOutputStream os = new ObjectOutputStream(clientSocket.getOutputStream());
-            os.writeBytes("Ass");
-            os.writeBytes("Ass2");
+            BufferedOutputStream bos = new BufferedOutputStream(clientSocket.getOutputStream());
+            OutputStreamWriter os = new OutputStreamWriter(bos, "US-ASCII");
+
+            ArrayList<String> relays = new ArrayList<>();
+            Logger.info("Total Relays: " + relays.size());
+            for (ServerDetails details : this.relays) {
+                relays.add(details.getHost() + ":" + details.getPort() + ":" + DatatypeConverter.printBase64Binary(details.getPublicKey().getEncoded()));
+            }
+
+            os.write(Joiner.on("@").join(relays) + "\n");
             os.flush();
         }
     }

@@ -75,7 +75,7 @@ public class ClientSocket {
             encryptedChunks.add(
                 DatatypeConverter.printBase64Binary(
                     PublicEncryption.encrypt(
-                        new String(Arrays.copyOfRange(fullBytes, i, i + CHUNK_SIZE)),
+                        new String(Arrays.copyOfRange(fullBytes, i, i + CHUNK_SIZE < fullBytes.length ? i + CHUNK_SIZE : fullBytes.length)),
                         hostPublicKey
                     )
                 )
