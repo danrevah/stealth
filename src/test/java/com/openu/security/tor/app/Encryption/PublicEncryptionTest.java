@@ -19,13 +19,10 @@ public class PublicEncryptionTest {
     public void shouldDecryptMessage()
     {
         try {
-            KeyPairs keyPairs = new KeyPairs();
-
-            keyPairs.setPublicKeyFromBase64(PublicEncryptionTest.PUBLIC_KEY_FOR_TESTS);
-            keyPairs.setPrivateKeyFromBase64(PublicEncryptionTest.PRIVATE_KEY_FOR_TESTS);
-
-            byte[] encrypted = DatatypeConverter.parseBase64Binary(PublicEncryptionTest.ENCRYPTED_MESSAGE);
-            String decryptedString = PublicEncryption.decrypt(encrypted, keyPairs.getPrivateKey());
+            String decryptedString = PublicEncryption.decrypt(
+                PublicEncryptionTest.ENCRYPTED_MESSAGE,
+                KeyHelper.base64ToPrivateKey(PRIVATE_KEY_FOR_TESTS)
+            );
 
             assertEquals(PublicEncryptionTest.MESSAGE, decryptedString);
 
@@ -42,20 +39,10 @@ public class PublicEncryptionTest {
 
             keyPairs.generateKeyPair();
 
-            byte[] encryptedBytes = PublicEncryption.encrypt(PublicEncryptionTest.MESSAGE, keyPairs.getPublicKey());
-            String base64encrypted = DatatypeConverter.printBase64Binary(encryptedBytes);
+            String base64encrypted = PublicEncryption.encrypt(PublicEncryptionTest.MESSAGE, keyPairs.getPublicKey());
+            String base64decrypted = PublicEncryption.decrypt(base64encrypted, keyPairs.getPrivateKey());
 
-//            System.out.println(base64encrypted);
-//            System.out.println(keyPairs.getPublicKeyAsBase64());
-//            System.out.println(keyPairs.getPrivateKeyAsBase64());
-
-            byte[] encryptedBytesDecode = DatatypeConverter.parseBase64Binary(base64encrypted);
-
-            assertArrayEquals(encryptedBytesDecode, encryptedBytes);
-
-            String decryptedString = PublicEncryption.decrypt(encryptedBytesDecode, keyPairs.getPrivateKey());
-
-            assertEquals(PublicEncryptionTest.MESSAGE, decryptedString);
+            assertEquals(PublicEncryptionTest.MESSAGE, base64decrypted);
 
         } catch (Exception e) {
             fail();
