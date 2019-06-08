@@ -4,24 +4,17 @@ Emulating an encrypted tunnel using relays (Based on TOR concept).
 
 ## Examples
 
-Client:
-
+<p align="center"><b>Client</b></p>
 <p align="center">
   <img width="690" height="450" src="docs/gifs/client.gif">
 </p>
 
-
-Trusted Server:
-
-
-
+<p align="center"><b>Trusted Server</b></p>
 <p align="center">
   <img width="690" height="450" src="docs/gifs/trusted-server.gif">
 </p>
 
-
-Relay:
-
+<p align="center"><b>Relay</b></p>
 <p align="center">
   <img width="690" height="450" src="docs/gifs/relay.gif">
 </p>
