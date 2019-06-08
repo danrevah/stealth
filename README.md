@@ -7,7 +7,7 @@ Emulating an encrypted tunnel using relays (Based on TOR concept).
 Client:
 
 <p align="center">
-  <img width="460" height="300" src="docs/gifs/client.gif">
+  <img width="690" height="450" src="docs/gifs/client.gif">
 </p>
 
 
@@ -16,14 +16,14 @@ Trusted Server:
 
 
 <p align="center">
-  <img width="460" height="300" src="docs/gifs/trusted-server.gif">
+  <img width="690" height="450" src="docs/gifs/trusted-server.gif">
 </p>
 
 
 Relay:
 
 <p align="center">
-  <img width="460" height="300" src="docs/gifs/relay.gif">
+  <img width="690" height="450" src="docs/gifs/relay.gif">
 </p>
 
 ## Configuration
