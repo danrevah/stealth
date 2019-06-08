@@ -1,0 +1,69 @@
+<h1 id="stealth-project">Stealth Project</h1>
+<p>Emulating an encrypted tunnel using relays (Based on TOR concept).</p>
+<h2 id="idea">Idea</h2>
+<p>The project is separated to 3 applications:</p>
+<h3 id="relay">Relay</h3>
+<p>Relay is where the traffic passes through before reaching it destination. Relays add to the speed and robustness of the network.</p>
+<h3 id="client">Client</h3>
+<p>Client gets a list of relays, and creates an encrypted chain of messages with their public keys.</p>
+<p>The encrypted chain encrypts an HTTP GET request that will be passed to the initial relay (and passed on until it reaches it's destination).</p>
+<h3 id="trusted-server">Trusted Server</h3>
+<p>Trusted server is the main server which hold a list of relay's and their public keys.</p>
+<p>Clients interact with a trusted server to get list of relays to use in their tunnel to web.</p>
+<p>Relays interact with a trusted server to add itself to the network relay's list.</p>
+<h2 id="examples">Examples</h2>
+<p align="center">
+<b>Client</b>
+</p>
+<p align="center">
+  
+<img width="690" height="450" src="docs/gifs/client.gif">
+</p>
+
+<p align="center">
+<b>Trusted Server</b>
+</p>
+<p align="center">
+  
+<img width="690" height="450" src="docs/gifs/trusted-server.gif">
+</p>
+
+<p align="center">
+<b>Relay</b>
+</p>
+<p align="center">
+  
+<img width="690" height="450" src="docs/gifs/relay.gif">
+</p>
+
+
+<h2 id="configuration">Configuration</h2>
+<p>In <code>com/openu/security/tor/app/Services/Config.java</code> we should configure TrustedServer IP, PORT and PUBLIC_KEY. This is hardcoded into the client &amp; relays in order to prevent MITM attacks.</p>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">class</span> Config {
+    <span class="kw">public</span> <span class="dt">final</span> <span class="dt">static</span> String TRUSTED_SERVER_HOST = <span class="st">&quot;127.0.0.1&quot;</span>;
+    <span class="kw">public</span> <span class="dt">final</span> <span class="dt">static</span> String TRUSTED_SERVER_PORT = <span class="st">&quot;3000&quot;</span>;
+    <span class="dt">final</span> <span class="dt">static</span> <span class="kw">public</span> String TRUSTED_SERVER_PUBLIC_KEY = <span class="st">&quot;...&quot;</span>;
+
+}</code></pre>
+<h2 id="install">Install</h2>
+<pre class="sh"><code>$ mvn install</code></pre>
+<h2 id="compile">Compile</h2>
+<pre class="sh"><code>$ mvn clean compile assembly:single</code></pre>
+<h2 id="run-tests">Run tests</h2>
+<pre class="sh"><code>$ mvn test</code></pre>
+<h2 id="run">Run</h2>
+<pre class="sh"><code>$ ./bin/proxy </code></pre>
+<h2 id="conclusions-of-pen-test">Conclusions of Pen-Test</h2>
+<ol style="list-style-type: decimal">
+<li><p>MITM Trusted Server - Trusted server private key is contained in the compiled version of this project (Fix in TODO's #1 + #2).</p></li>
+<li><p>Detection - Pushing many relay's into the network could result in the detection of the client. Assuming client uses a 3 relays chain, in-case those 3 relays belongs to the one who was trying to detect users, it is possible to expose the user. The exit relay can know what request was made, and the first relay can identify the client, not for sure, since it can't really tell if it's a client or a relay, but this can easily been checked by getting the relay's list from the TrustedServer (Fix in TODO's #3).</p></li>
+<li><p>Denial of service - It is possible to spam the network with fake relays, making it in-accessible to users (Fix in TODO's #4 + #5).</p></li>
+</ol>
+<h2 id="todo">TODO</h2>
+<ol style="list-style-type: decimal">
+<li><p>In order this to be secured, the TrustedServer should be compiled separately! Since the private-key is hardcoded and the client and relay jar's should not have access to this information.</p></li>
+<li><p>Private &amp; Public key is included in this repository which is not safe to use, generation of a new key pair is required.</p></li>
+<li><p>Exit relays should be from a list of well-known relays in-order to prevent spoofing &amp; detection.</p></li>
+<li><p>TrustedServer should ping relays every X seconds to validate is alive and responds (maybe route a message and get a response?).</p></li>
+<li><p>TrustedServer should check, before adding a new relay, if there's already a relay with the same IP, if so he should handle this scneario (remove old, add new).</p></li>
+</ol>
