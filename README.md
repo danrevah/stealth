@@ -2,7 +2,7 @@
 
 Emulating an encrypted tunnel using relays (Based on TOR concept).
 
-## Idea
+## Overview
 
 The project is separated to 3 applications:
 
