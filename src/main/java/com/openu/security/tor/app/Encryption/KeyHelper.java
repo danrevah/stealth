@@ -7,6 +7,11 @@ import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
+/**
+ * KeyHelper
+ *
+ * Converting between base64 to public/private keys and vice-versa.
+ */
 public class KeyHelper {
 
     public static PublicKey base64ToPublicKey(String key) {

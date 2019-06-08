@@ -13,6 +13,20 @@ import com.openu.security.tor.app.Validator.Validator;
 
 import java.util.Scanner;
 
+/**
+ * Client
+ *
+ * Client application
+ *  - 1. Receives URL from user
+ *  - 2. Getting a list of Relay's from the TrustedServer
+ *  - 3. Randomly building a relay chain
+ *  - 4. Encrypting GET Request, so that only the exit relay could read.
+ *  - 5. Using each relay is adding another stage to the encryption,
+ *       which means each relay only knows the next relay in line,
+ *       but is un-aware of the length of the route.
+ *  - 6. Send chained encrypted packet to first relay
+ *  - 7. Waiting for response - decrypting with publicKey.
+ */
 public class Client implements Service {
 
     private int chainLength;

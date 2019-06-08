@@ -18,6 +18,12 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ListenerHandler
+ *
+ * Used by both the Relay and the TrustedServer application.
+ * Receiving packet and leading to a specific action.
+ */
 public class ListenerHandler implements Runnable {
 
     private Socket clientSocket;

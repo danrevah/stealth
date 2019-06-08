@@ -15,9 +15,17 @@ import com.openu.security.tor.app.Logger.Logger;
 
 public class PublicEncryption {
 
-    // Chunk size 256 since RSA with 2048 bits can only encrypt up to: 256 bytes (2048/11-8 = 256).
-    private static final int CHUNK_SIZE = 256;
+    // Chunk size 200 since RSA with 2048 bits can only encrypt up to: 256 bytes (2048/11-8 = 256).
+    private static final int CHUNK_SIZE = 200;
 
+    /**
+     * Encryption method, used to encrypt via a publicKey.
+     * Splitting to chunks, since RSA cannot handle length longer than [BITS]/11-8.
+     *
+     * @param packet - string to encrypt
+     * @param publicKey - public key to use
+     * @return encrypted string
+     */
     public static String encrypt(String packet, PublicKey publicKey) {
         byte[] fullBytes = packet.getBytes();
 
@@ -37,6 +45,14 @@ public class PublicEncryption {
        return Joiner.on("@").join(encryptedChunks);
     }
 
+    /**
+     * Decryption method, used to decrypt via a privateKey.
+     * Retrieving chunks - and decrypting each.
+     *
+     * @param data - string to decrypt
+     * @param privateKey - private key to use
+     * @return decrypted string
+     */
     public static String decrypt(String data, PrivateKey privateKey) {
         String[] chunks = data.split("@");
         String decrypted = "";

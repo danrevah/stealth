@@ -9,6 +9,11 @@ import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ListenerSocket
+ *
+ * Setting up a new listener socket, leading each connection to a new thread.
+ */
 public class ListenerSocket {
 
     private ServerSocket socket;

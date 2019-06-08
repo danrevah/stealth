@@ -17,6 +17,12 @@ import java.security.PublicKey;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * ClientSocket
+ *
+ * Used both by Relay & Client applications,
+ * interacting with other relays or the TrustedServer.
+ */
 public class ClientSocket {
 
     private Socket socket;
@@ -96,7 +102,7 @@ public class ClientSocket {
     // -- Private
     private String buildPacket(ProtocolHeader header, List<String> data) throws Exception {
         String packet = header.getName() + (data.size() > 0 ? (" " + String.join(" ", data)) : "");
-        Logger.info("<Packet>");
+        Logger.info("<Packet> " + header.getName());
         Logger.debug(packet);
         return packet;
     }

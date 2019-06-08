@@ -1,5 +1,13 @@
 package com.openu.security.tor.app.Logger;
 
+/**
+ * Logger
+ *
+ * Levels:
+ *  - ERROR
+ *  - INFO
+ *  - DEBUG (only seen in verbose mode)
+ */
 public class Logger {
 
     private static final String BEING_COLOR_PREFIX = (char)27 + "[";
@@ -41,7 +49,7 @@ public class Logger {
     }
 
     private static void logLabel(int color, String label, String log) {
-        System.out.print(BEING_COLOR_PREFIX + color + BEING_COLOR_POSTFIX + label + END_COLOR);
+        System.out.print(BEING_COLOR_PREFIX + color + BEING_COLOR_POSTFIX + label + ":" + END_COLOR);
         System.out.println(log);
     }
 }
