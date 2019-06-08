@@ -1,4 +1,4 @@
-package com.openu.security.tor.app.PublicEncryption;
+package com.openu.security.tor.app.Encryption;
 
 import com.openu.security.tor.app.Sockets.ServerDetails;
 

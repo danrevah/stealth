@@ -4,9 +4,9 @@ import com.openu.security.tor.app.Http.HttpRequest;
 import com.openu.security.tor.app.Logger.LogLevel;
 import com.openu.security.tor.app.Logger.Logger;
 import com.openu.security.tor.app.Protocol.ProtocolHeader;
-import com.openu.security.tor.app.PublicEncryption.KeyHelper;
-import com.openu.security.tor.app.PublicEncryption.KeyPairs;
-import com.openu.security.tor.app.PublicEncryption.PublicEncryption;
+import com.openu.security.tor.app.Encryption.KeyHelper;
+import com.openu.security.tor.app.Encryption.KeyPairs;
+import com.openu.security.tor.app.Encryption.PublicEncryption;
 import com.google.common.base.Joiner;
 import com.openu.security.tor.app.Services.Config;
 
@@ -43,12 +43,12 @@ public class ListenerHandler implements Runnable {
             String data;
             while ((data = in.readLine()) != null) {
                 Logger.info("<Received Message>");
-                Logger.info(data);
+                Logger.debug(data);
                 Logger.info("<Decrypting>");
 
-                String decrypted = PublicEncryption.decryptChunks(data, privateKey);
+                String decrypted = PublicEncryption.decrypt(data, privateKey);
+                Logger.debug(decrypted);
 
-                Logger.info("Message: " + decrypted);
                 handleRequests(decrypted);
             }
         } catch (Exception e) {
@@ -79,7 +79,8 @@ public class ListenerHandler implements Runnable {
             ClientSocket relay = new ClientSocket(host, port, new KeyPairs(), KeyHelper.base64ToPublicKey(Config.TRUSTED_SERVER_PUBLIC_KEY));
             Logger.info("<Route> Passing to next route " + host + ":" + port);
             String response = relay.send(encrypted, true, false);
-            Logger.info("<Route Response> " + response);
+            Logger.info("<Received Route Response>");
+            Logger.debug(response);
             os.write(response + "\n");
             os.flush();
         }
@@ -90,7 +91,7 @@ public class ListenerHandler implements Runnable {
 
             String response = HttpRequest.get(url);
 
-            String encryptedResponse = PublicEncryption.encryptChunks(response, KeyHelper.base64ToPublicKey(pubKey));
+            String encryptedResponse = PublicEncryption.encrypt(response, KeyHelper.base64ToPublicKey(pubKey));
 
             os.write(encryptedResponse + "\n");
             os.flush();
@@ -114,10 +115,10 @@ public class ListenerHandler implements Runnable {
 
             if (relaysArr.size() > 0) {
                 String returnedPacket = "RELAY " + Joiner.on("\nRELAY ").join(relays);
-                String encryptedPacket = PublicEncryption.encryptChunks(returnedPacket, clientPublicKey);
+                String encryptedPacket = PublicEncryption.encrypt(returnedPacket, clientPublicKey);
                 os.write(encryptedPacket + "\n");
             } else {
-                String encryptedPacket = PublicEncryption.encryptChunks("NO_RELAYS", clientPublicKey);
+                String encryptedPacket = PublicEncryption.encrypt("NO_RELAYS", clientPublicKey);
                 os.write(encryptedPacket + "\n");
             }
 

@@ -2,10 +2,9 @@ package com.openu.security.tor.app.Sockets;
 
 import com.openu.security.tor.app.Logger.Logger;
 import com.openu.security.tor.app.Protocol.ProtocolHeader;
-import com.openu.security.tor.app.PublicEncryption.KeyHelper;
-import com.openu.security.tor.app.PublicEncryption.KeyPairs;
-import com.openu.security.tor.app.PublicEncryption.PublicEncryption;
-import com.openu.security.tor.app.Services.Config;
+import com.openu.security.tor.app.Encryption.KeyHelper;
+import com.openu.security.tor.app.Encryption.KeyPairs;
+import com.openu.security.tor.app.Encryption.PublicEncryption;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.BufferedReader;
@@ -63,8 +62,8 @@ public class ClientSocket {
 
         if (encryption) {
             Logger.info("<Encrypting>");
-            modifiedPacket = PublicEncryption.encryptChunks(packet, hostPublicKey);
-            Logger.info("<Encrypted Packet> " + modifiedPacket);
+            modifiedPacket = PublicEncryption.encrypt(packet, hostPublicKey);
+            Logger.debug("<Encrypted Packet> " + modifiedPacket);
         }
 
         InputStream is = socket.getInputStream();
@@ -78,11 +77,13 @@ public class ClientSocket {
 
         if (recieveBack) {
             String message = br.readLine();
-            Logger.info("<Received back>: " + message);
+            Logger.info("<Received back>");
+            Logger.debug(message);
 
             if (encryption) {
-                String decrypted = PublicEncryption.decryptChunks(message, keyPairs.getPrivateKey());
-                Logger.info("<Decrypted>: " + decrypted);
+                String decrypted = PublicEncryption.decrypt(message, keyPairs.getPrivateKey());
+                Logger.info("<Decrypted>");
+                Logger.debug(decrypted);
                 return decrypted;
             }
 
@@ -95,7 +96,8 @@ public class ClientSocket {
     // -- Private
     private String buildPacket(ProtocolHeader header, List<String> data) throws Exception {
         String packet = header.getName() + (data.size() > 0 ? (" " + String.join(" ", data)) : "");
-        Logger.info("<Packet> " + packet);
+        Logger.info("<Packet>");
+        Logger.debug(packet);
         return packet;
     }
 }

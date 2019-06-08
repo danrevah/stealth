@@ -1,4 +1,4 @@
-package com.openu.security.tor.app.PublicEncryption;
+package com.openu.security.tor.app.Encryption;
 
 import org.junit.Test;
 

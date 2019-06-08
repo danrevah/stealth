@@ -1,4 +1,4 @@
-package com.openu.security.tor.app.PublicEncryption;
+package com.openu.security.tor.app.Encryption;
 
 import java.security.*;
 
@@ -9,7 +9,7 @@ public class KeyPairs {
 
     public void generateKeyPair() throws NoSuchAlgorithmException {
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-        keyGen.initialize(RSAConstants.ALGORITHM_BITS);
+        keyGen.initialize(EncryptionConstants.BITS);
         KeyPair pair = keyGen.generateKeyPair();
 
         this.privateKey = pair.getPrivate();

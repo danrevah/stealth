@@ -1,9 +1,7 @@
 package com.openu.security.tor.app.Services.TrustedServer;
 
-import com.openu.security.tor.app.Logger.LogLevel;
 import com.openu.security.tor.app.Logger.Logger;
-import com.openu.security.tor.app.PublicEncryption.KeyHelper;
-import com.openu.security.tor.app.PublicEncryption.KeyPairs;
+import com.openu.security.tor.app.Encryption.KeyHelper;
 import com.openu.security.tor.app.Services.Config;
 import com.openu.security.tor.app.Services.Service;
 import com.openu.security.tor.app.Sockets.ListenerSocket;

@@ -1,4 +1,4 @@
-package com.openu.security.tor.app.PublicEncryption;
+package com.openu.security.tor.app.Encryption;
 
 import com.openu.security.tor.app.Logger.Logger;
 import com.openu.security.tor.app.Sockets.Database;
@@ -37,7 +37,7 @@ public class ChainedEncryption {
         List<ServerDetails> middleRelays = relays;
         String encryptedPacket = packet;
 
-        Logger.info("<Chain Encryption> Chaining " + chainLength + " relays..");
+        Logger.debug("<Chain Encryption> Chaining " + chainLength + " relays..");
 
         int lastIndex = middleRelays.size() - 1;
         ServerDetails firstRelay = middleRelays.get(lastIndex);
@@ -45,7 +45,7 @@ public class ChainedEncryption {
 
         for (ServerDetails relay : middleRelays) {
             encryptedPacket = "ROUTE " + relay.getHost() + " " + relay.getPort() + " "
-                    + PublicEncryption.encryptChunks(encryptedPacket, relay.getPublicKey());
+                    + PublicEncryption.encrypt(encryptedPacket, relay.getPublicKey());
         }
 
         return new ChainedResponse(encryptedPacket, firstRelay);

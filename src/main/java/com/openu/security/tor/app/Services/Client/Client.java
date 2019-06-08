@@ -1,16 +1,15 @@
 package com.openu.security.tor.app.Services.Client;
 
-import com.openu.security.tor.app.Logger.LogLevel;
 import com.openu.security.tor.app.Logger.Logger;
-import com.openu.security.tor.app.PublicEncryption.ChainedEncryption;
-import com.openu.security.tor.app.PublicEncryption.ChainedResponse;
-import com.openu.security.tor.app.PublicEncryption.KeyHelper;
-import com.openu.security.tor.app.PublicEncryption.KeyPairs;
+import com.openu.security.tor.app.Encryption.ChainedEncryption;
+import com.openu.security.tor.app.Encryption.ChainedResponse;
+import com.openu.security.tor.app.Encryption.KeyHelper;
+import com.openu.security.tor.app.Encryption.KeyPairs;
 import com.openu.security.tor.app.Services.Config;
 import com.openu.security.tor.app.Services.Service;
 import com.openu.security.tor.app.Sockets.ClientSocket;
-import com.openu.security.tor.app.Sockets.Database;
 import com.openu.security.tor.app.Sockets.ServerDetails;
+import com.openu.security.tor.app.Validator.Validator;
 
 import java.util.Scanner;
 
@@ -41,7 +40,10 @@ public class Client implements Service {
             System.out.print("URL for HTTP Get request (CTRL+C to stop): ");
             input = scanner.nextLine();
 
-            // @TODO: validate URL?
+            if (!Validator.isUrlValid(input)) {
+                Logger.error("Invalid URL!");
+                continue;
+            }
 
             // Send get Relays
             this.clientSocket.getRelays(chainLength, keyPairs.getPublicKey());
