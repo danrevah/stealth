@@ -57,15 +57,15 @@ $ ./bin/proxy
 
 ## WARNING
 
-1. In order this to be secured, the TrustedServer should be compiled on a different project.
+1. In order this to be secured, the TrustedServer should be compiled on a separately!
 Since the private-key is hardcoded and the client and relay jar's should not have access to this information.
 
 2. Private & Public key is included in this repository which is not safe to use, generation of a new key pair is required.
 
+3. Exit relays should be from a list of well-known relays in-order to prevent spoofing.
+
 ## TODO
 
-1. Warnings must be taken care of
+1. TrustedServer should ping relays every X seconds to validate is alive.
 
-2. TrustedServer should ping relays every X seconds to validate is alive.
-
-3. "@TODO" leftovers should also be taken care of
+2. TrustedServer should check, before adding a new relay, if there's already a relay with the same IP, if so he should handle this scneario (remove old, add new).
