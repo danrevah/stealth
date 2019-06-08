@@ -2,6 +2,7 @@ package com.openu.security.tor.app.Services.TrustedServer;
 
 import com.openu.security.tor.app.Logger.LogLevel;
 import com.openu.security.tor.app.Logger.Logger;
+import com.openu.security.tor.app.PublicEncryption.KeyHelper;
 import com.openu.security.tor.app.PublicEncryption.KeyPairs;
 import com.openu.security.tor.app.Services.Config;
 import com.openu.security.tor.app.Services.Service;
@@ -12,12 +13,7 @@ public class TrustedServer implements Service {
     private ListenerSocket server;
 
     public TrustedServer() throws Exception {
-
-        // @TODO: Instance creation is redundant, move to static!
-        KeyPairs keyPairs = new KeyPairs();
-        keyPairs.setPrivateKeyFromBase64(Keys.PRIVATE_KEY);
-
-        this.server = new ListenerSocket("127.0.0.1", Config.TRUSTED_SERVER_PORT, keyPairs.getPrivateKey());
+        this.server = new ListenerSocket("0.0.0.0", Config.TRUSTED_SERVER_PORT, KeyHelper.base64ToPrivateKey(Keys.PRIVATE_KEY));
         Logger.info("TrustedServer listening for connections...");
     }
 

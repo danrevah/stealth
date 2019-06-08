@@ -2,6 +2,7 @@ package com.openu.security.tor.app.Sockets;
 
 import com.openu.security.tor.app.Logger.Logger;
 import com.openu.security.tor.app.Protocol.ProtocolHeader;
+import com.openu.security.tor.app.PublicEncryption.KeyHelper;
 import com.openu.security.tor.app.PublicEncryption.KeyPairs;
 import com.openu.security.tor.app.PublicEncryption.PublicEncryption;
 import com.openu.security.tor.app.Services.Config;
@@ -44,10 +45,7 @@ public class ClientSocket {
                 continue;
             }
 
-            // @TODO: Instance creeation can be avoided..
-            KeyPairs keyPairs = new KeyPairs();
-            keyPairs.setPublicKeyFromBase64(splitted[3]);
-            Database.addRelay(new ServerDetails(splitted[1], Integer.valueOf(splitted[2]), keyPairs.getPublicKey()));
+            Database.addRelay(new ServerDetails(splitted[1], Integer.valueOf(splitted[2]), KeyHelper.base64ToPublicKey(splitted[3])));
         }
     }
 

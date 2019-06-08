@@ -4,6 +4,7 @@ import com.openu.security.tor.app.Logger.LogLevel;
 import com.openu.security.tor.app.Logger.Logger;
 import com.openu.security.tor.app.PublicEncryption.ChainedEncryption;
 import com.openu.security.tor.app.PublicEncryption.ChainedResponse;
+import com.openu.security.tor.app.PublicEncryption.KeyHelper;
 import com.openu.security.tor.app.PublicEncryption.KeyPairs;
 import com.openu.security.tor.app.Services.Config;
 import com.openu.security.tor.app.Services.Service;
@@ -22,17 +23,13 @@ public class Client implements Service {
 
     public Client(int chainLength) throws Exception {
         this.chainLength = chainLength;
-
-        // @TODO: Move converting functions to static or a different class
-        KeyPairs publicOnlyKeyPair = new KeyPairs();
-        publicOnlyKeyPair.setPublicKeyFromBase64(Config.TRUSTED_SERVER_PUBLIC_KEY);
-
         this.keyPairs = new KeyPairs();
         this.keyPairs.generateKeyPair();
-        this.clientSocket = new ClientSocket(Config.TRUSTED_SERVER_HOST, Config.TRUSTED_SERVER_PORT, this.keyPairs, publicOnlyKeyPair.getPublicKey());
+        this.clientSocket = new ClientSocket(Config.TRUSTED_SERVER_HOST, Config.TRUSTED_SERVER_PORT, this.keyPairs,
+                KeyHelper.base64ToPublicKey(Config.TRUSTED_SERVER_PUBLIC_KEY));
         this.scanner = new Scanner(System.in);
 
-        Logger.log(LogLevel.Info,
+        Logger.info(
             "<Client> Connected to Trusted Server (" + Config.TRUSTED_SERVER_HOST + ":" + Config.TRUSTED_SERVER_PORT + ")"
         );
     }
@@ -49,7 +46,8 @@ public class Client implements Service {
             // Send get Relays
             this.clientSocket.getRelays(chainLength, keyPairs.getPublicKey());
 
-            ChainedResponse chain = ChainedEncryption.chain(chainLength, "HTTP_GET_REQUEST " + input + " " + keyPairs.getPublicKeyAsBase64());
+            ChainedResponse chain = ChainedEncryption.chain(chainLength, "HTTP_GET_REQUEST " + input + " "
+                    + KeyHelper.publicKeyToBase64(keyPairs.getPublicKey()));
 
             ServerDetails relayDetails = chain.getFirstRelay();
             Logger.info("<Get Request> Sending to initial relay " + relayDetails.getHost() + ":" + relayDetails.getPort());

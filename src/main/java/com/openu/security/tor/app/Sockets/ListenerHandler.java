@@ -4,6 +4,7 @@ import com.openu.security.tor.app.Http.HttpRequest;
 import com.openu.security.tor.app.Logger.LogLevel;
 import com.openu.security.tor.app.Logger.Logger;
 import com.openu.security.tor.app.Protocol.ProtocolHeader;
+import com.openu.security.tor.app.PublicEncryption.KeyHelper;
 import com.openu.security.tor.app.PublicEncryption.KeyPairs;
 import com.openu.security.tor.app.PublicEncryption.PublicEncryption;
 import com.google.common.base.Joiner;
@@ -13,6 +14,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.net.Socket;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,22 +69,14 @@ public class ListenerHandler implements Runnable {
         if (header.equals(ProtocolHeader.ADD_RELAY.getName())) {
             String host = clientSocket.getInetAddress().getHostAddress();
             int port = Integer.valueOf(chunks[1]);
-            KeyPairs keyPairPub = new KeyPairs();
-            keyPairPub.setPublicKeyFromBase64(chunks[2]);
-
-            Database.addRelay(new ServerDetails(host, port, keyPairPub.getPublicKey()));
+            Database.addRelay(new ServerDetails(host, port, KeyHelper.base64ToPublicKey(chunks[2])));
         }
 
         if (header.equals(ProtocolHeader.ROUTE.getName())) {
             String host = chunks[1];
             int port = Integer.valueOf(chunks[2]);
             String encrypted = chunks[3];
-
-            // @TODO: Move converting functions to static or a different class
-            KeyPairs publicOnlyKeyPair = new KeyPairs();
-            publicOnlyKeyPair.setPublicKeyFromBase64(Config.TRUSTED_SERVER_PUBLIC_KEY);
-
-            ClientSocket relay = new ClientSocket(host, port, new KeyPairs(), publicOnlyKeyPair.getPublicKey());
+            ClientSocket relay = new ClientSocket(host, port, new KeyPairs(), KeyHelper.base64ToPublicKey(Config.TRUSTED_SERVER_PUBLIC_KEY));
             Logger.info("<Route> Passing to next route " + host + ":" + port);
             String response = relay.send(encrypted, true, false);
             Logger.info("<Route Response> " + response);
@@ -96,10 +90,7 @@ public class ListenerHandler implements Runnable {
 
             String response = HttpRequest.get(url);
 
-            // @TODO: no need instance...
-            KeyPairs keyPairs = new KeyPairs();
-            keyPairs.setPublicKeyFromBase64(pubKey);
-            String encryptedResponse = PublicEncryption.encryptChunks(response, keyPairs.getPublicKey());
+            String encryptedResponse = PublicEncryption.encryptChunks(response, KeyHelper.base64ToPublicKey(pubKey));
 
             os.write(encryptedResponse + "\n");
             os.flush();
@@ -113,22 +104,20 @@ public class ListenerHandler implements Runnable {
 
             List<ServerDetails> relaysArr = Database.getRelays();
             ArrayList<String> relays = new ArrayList<>();
-            Logger.info("Total Relays: " + relaysArr.size());
+            Logger.debug("Total Relays: " + relaysArr.size());
 
             for (ServerDetails details : relaysArr) {
                 relays.add(details.getHost() + " " + details.getPort() + " " + DatatypeConverter.printBase64Binary(details.getPublicKey().getEncoded()));
             }
 
-            // @TODO: no need instance...
-            KeyPairs keyPairs = new KeyPairs();
-            keyPairs.setPublicKeyFromBase64(clientPubKey);
+            PublicKey clientPublicKey = KeyHelper.base64ToPublicKey(clientPubKey);
 
             if (relaysArr.size() > 0) {
                 String returnedPacket = "RELAY " + Joiner.on("\nRELAY ").join(relays);
-                String encryptedPacket = PublicEncryption.encryptChunks(returnedPacket, keyPairs.getPublicKey());
+                String encryptedPacket = PublicEncryption.encryptChunks(returnedPacket, clientPublicKey);
                 os.write(encryptedPacket + "\n");
             } else {
-                String encryptedPacket = PublicEncryption.encryptChunks("NO_RELAYS", keyPairs.getPublicKey());
+                String encryptedPacket = PublicEncryption.encryptChunks("NO_RELAYS", clientPublicKey);
                 os.write(encryptedPacket + "\n");
             }
 

@@ -7,12 +7,12 @@ package com.openu.security.tor.app.Protocol;
  *                 sends back: RELAY, -
  *
  * Client        - responds to: -
- *                 sends: GET_RELAYS, HTTP_GET_REQUEST
+ *                 sends: GET_RELAYS, HTTP_GET_REQUEST, ROUTE
  *                 recives back: RELAY, -
  *
  * Relay         - responds to: HTTP_GET_REQUEST
  *                 sends back: RESPONSE
- *                 sends: ADD_RELAY, HTTP_GET_REQUEST
+ *                 sends: ADD_RELAY, HTTP_GET_REQUEST, ROUTE
  */
 public enum ProtocolHeader {
     GET_RELAYS("GET_RELAYS"),

@@ -1,6 +1,15 @@
 package com.openu.security.tor.app.Logger;
 
 public class Logger {
+
+    private static final String BEING_COLOR_PREFIX = (char)27 + "[";
+    private static final String BEING_COLOR_POSTFIX = "m";
+    private static final String END_COLOR = (char)27 + "[0m ";
+
+    private static final int RED_COLOR = 31;
+    private static final int YELLOW_COLOR = 33;
+    private static final int BLUE_COLOR = 34;
+
     private static boolean verbose = false;
 
     public static void setMode(boolean verbose) {
@@ -15,18 +24,24 @@ public class Logger {
         log(LogLevel.Info, log);
     }
 
-    // @TODO: Handle colors more nicely with enum in a private method.
+    public static void debug(String log) {
+        log(LogLevel.Debug, log);
+    }
+
     public static void log(LogLevel level, String log) {
         if (level == LogLevel.Error) {
-            System.out.print((char)27 + "[31m" + "ERROR:" + (char)27 + "[0m ");
-            System.out.println(log);
-            return;
+            logLabel(RED_COLOR, "ERROR", log);
         }
+        else if (level == LogLevel.Info) {
+            logLabel(YELLOW_COLOR, "INFO", log);
+        }
+        else if (level == LogLevel.Debug && verbose) {
+            logLabel(BLUE_COLOR, "DEBUG", log);
+        }
+    }
 
-        if (level == LogLevel.Info && verbose) {
-            System.out.print((char)27 + "[33m" + "INFO:" + (char)27 + "[0m ");
-            System.out.println(log);
-            return;
-        }
+    private static void logLabel(int color, String label, String log) {
+        System.out.print(BEING_COLOR_PREFIX + color + BEING_COLOR_POSTFIX + label + END_COLOR);
+        System.out.println(log);
     }
 }

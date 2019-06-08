@@ -1,3 +1,10 @@
+// @TODO: 2. Pen testing
+// @TODO: 2.1. Exit relay spoofing..
+// @TODO: 2.2. Hacking to an exit relay could result in an XYZ
+// @TODO: 2.3. Spamming network since not checking duplicate relay iP
+// @TODO: 2.4. Spamming network with plenty of relays?
+// @TODO: 2.5. TrustedServer private key as part of source-code..
+
 package com.openu.security.tor.app;
 
 import com.openu.security.tor.app.Logger.LogLevel;
@@ -14,6 +21,15 @@ import java.io.StringWriter;
 
 enum ServiceNames { Relay, TrustedServer, Client }
 
+/**
+ * Stealth
+ *
+ * Encrypted chained proxy, depended on relays and a trusted server (implements similar concepts to TOR).
+ * This is my final project in the Cyber-Security course at Open University of Israel.
+ *
+ * @author Dan Revah (danrevah89@gmail.com)
+ * @version v0.1
+ */
 @Command(name = "proxy", mixinStandardHelpOptions = true, version = "Encrypted proxy 1.0")
 public class App implements Runnable {
     @Option(
@@ -54,7 +70,7 @@ public class App implements Runnable {
                     break;
 
                 default:
-                    System.out.println("ERROR: No such service!");
+                    Logger.error("No such service!");
                     return;
             }
 
