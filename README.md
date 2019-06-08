@@ -4,13 +4,18 @@ Emulating an encrypted tunnel using relays (Based on TOR concept).
 
 ## Examples
 
-*Client:*
+Client:
+
 ![](docs/gifs/client.gif)
 
-*Trusted Server:*
+
+Trusted Server:
+
 ![](docs/gifs/trusted-server.gif)
 
-*Relay:*
+
+Relay:
+
 ![](docs/gifs/relay.gif)
 
 ## Configuration
