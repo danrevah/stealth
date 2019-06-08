@@ -2,6 +2,16 @@
 
 Emulating an encrypted tunnel using relays (Based on TOR concept).
 
+## Examples
+
+*Client:*
+![](docs/gifs/client.gif)
+
+*Trusted Server:*
+![](docs/gifs/trusted-server.gif)
+
+*Relay:*
+![](docs/gifs/relay.gif)
 
 ## Configuration
 In `com/openu/security/tor/app/Services/Config.java` we should configure TrustedServer IP, PORT and PUBLIC_KEY.
