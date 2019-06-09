@@ -103,7 +103,7 @@ Client flow to make an HTTP GET Request to `https://www.google.com`.
           ROUTE [IP] [PORT] [ENCRYPTED_MESSAGE]`
           ```
           
-        * Sends `[ENCRYPTED_MESSAGE]` to `[IP]:[PORT]`
+        * Sends `ENCRYPTED_MESSAGE` to `IP:PORT`
     * Second relay 
         * Decrypts the message with it's private key.
         
@@ -111,7 +111,7 @@ Client flow to make an HTTP GET Request to `https://www.google.com`.
           ROUTE [IP] [PORT] [ENCRYPTED_MESSAGE]`
           ```
           
-        * Sends `[ENCRYPTED_MESSAGE]` to `[IP]:[PORT]`
+        * Sends `ENCRYPTED_MESSAGE` to `IP:PORT`
     * Third relay
         * Decrypts the message with it's private key.
         
