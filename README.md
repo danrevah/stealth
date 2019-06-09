@@ -9,6 +9,7 @@ Emulating an encrypted tunnel using relays (Based on TOR concept).
     - [Client](#client)
     - [Trusted Server](#trusted-server)
  - [Examples](#examples)
+ - [Example of a client request flow](#example-of-a-client-request-flow)
  - [Setup](#setup)
      - [Configuration](#configuration)   
      - [Install](#install)   
@@ -54,6 +55,36 @@ Relays interact with a trusted server to add itself to the network relay's list.
 <p align="center">
   <img width="690" height="450" src="docs/gifs/relay.gif">
 </p>
+
+## Example of a client request flow
+
+Client flow to make an HTTP GET Request to `https://www.google.com`.
+
+1. "GET_RELAYS [N]" - Requesting TrustedServer for N relays.
+2. "RELAY [IP] [PORT] [PUBLIC_KEY]" - Getting back N relays, with their public keys. 
+3. Building a chain of relays (assuming N=3):
+    * Clients generates a new RSA 4096 bit key-pair.
+    * Encrypting `HTTP_GET_REQUEST https://www.google.com [CLIENT_PUBLIC_KEY]` with the LAST in chain relay's public key.
+    * Encrypting `ROUTE [IP] [PORT] [PREVIOUSLY_ENCRYPTED_MESSAGE]` - previously encrypted message with the middle relay's public key, with a route IP and PORT to let the relay know which one is the next relay.
+    * Encrypting `ROUTE [IP] [PORT] [PREVIOUSLY_ENCRYPTED_MESSAGE]` - previously encrypted message with the first relay's public key, with a route IP and PORT to let the relay know which one is the next relay.
+4. Sending encrypted message to first relay in chain.
+    * First relay 
+        * Decrypts the message with it's private key.
+        * `ROUTE [IP] [PORT] [ENCRYPTED_MESSAGE]`
+        * Sends the message to the next in line.
+    * Second relay 
+        * Decrypts the message with it's private key.
+        * `ROUTE [IP] [PORT] [ENCRYPTED_MESSAGE]`
+        * Sends the message to next in line.
+    * Third relay
+        * Decrypts the message with it's private key.
+        * `HTTP_GET_REQUEST https://www.google.com [CLIENT_PUBLIC_KEY]`
+        * Makes an HTTP GET request to the requested url.
+        * Encrypts the message with the `CLIENT_PUBLIC_KEY`.
+        * Returns back the encrypted response.
+5. Encrypted message is being propagated back to the client.
+    
+    
 
 ## Setup
 
