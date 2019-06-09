@@ -15,7 +15,7 @@ Emulating an encrypted tunnel using relays (Based on TOR concept).
      - [Install](#install)   
      - [Compile](#compile)   
      - [Run Tests](#run-tests)   
-     - [Run](#run)   
+     - [Run](#run)
  - [Conclusions of Penetration Tests](#conclusions-of-penetration-tests)   
  - [TODO](#todo)   
  
@@ -60,13 +60,16 @@ Relays interact with a trusted server to add itself to the network relay's list.
 
 Client flow to make an HTTP GET Request to `https://www.google.com`.
 
-1. Requesting TrustedServer for N relays.
+1. Client generates a new key-pair.
+2. Requesting TrustedServer for N relays.
 
     ```
-    GET_RELAYS [N]
+    GET_RELAYS [N] [CLIENT_PUBLIC_KEY]
     ```
+    
+    (the client encrypts the packet with the TrustedServer public key).
  
-2. Getting back N relays, with their public keys.
+3. Getting back N relays, with their public keys.
 
     ```
     RELAY [IP] [PORT] [PUBLIC_KEY]
@@ -75,7 +78,9 @@ Client flow to make an HTTP GET Request to `https://www.google.com`.
     RELAY [IP] [PORT] [PUBLIC_KEY]
     ```
     
-3. Building a chain of relays (assuming N=3):
+    (TrustedServer encrypts the packet with the CLIENT_PUBLIC_KEY that was previously received).
+    
+4. Building a chain of relays (assuming N=3):
     * Clients generates a new RSA 4096 bit key-pair.
     * Encrypting packet with the LAST in chain relay's public key.
     
@@ -95,7 +100,7 @@ Client flow to make an HTTP GET Request to `https://www.google.com`.
       ROUTE [IP] [PORT] [PREVIOUSLY_ENCRYPTED_MESSAGE]
       ```
       
-4. Sending encrypted message to first relay in chain.
+5. Sending encrypted message to first relay in chain.
     * First relay 
         * Decrypts the message with it's private key.
           
@@ -122,8 +127,8 @@ Client flow to make an HTTP GET Request to `https://www.google.com`.
         * Makes an HTTP GET request to the requested url.
         * Encrypts the message with the `CLIENT_PUBLIC_KEY`.
         * Returns back the encrypted response.
-5. Encrypted message is being propagated back to the client.
-6. Client decrypts the message with it's private key.
+6. Encrypted message is being propagated back to the client.
+7. Client decrypts the message with it's private key.
     
     
 

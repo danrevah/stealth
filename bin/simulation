@@ -1,0 +1,3 @@
+#!/bin/bash
+
+(trap 'kill 0' SIGINT; ./bin/stealth TrustedServer & ./bin/stealth Relay & ./bin/stealth Relay & ./bin/stealth Relay & sleep 3; ./bin/stealth Client)
