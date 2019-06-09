@@ -71,11 +71,11 @@ Client flow to make an HTTP GET Request to `https://www.google.com`.
     * First relay 
         * Decrypts the message with it's private key.
         * `ROUTE [IP] [PORT] [ENCRYPTED_MESSAGE]`
-        * Sends the message to the next in line.
+        * Sends `[ENCRYPTED_MESSAGE]` to `[IP]:[PORT]`
     * Second relay 
         * Decrypts the message with it's private key.
         * `ROUTE [IP] [PORT] [ENCRYPTED_MESSAGE]`
-        * Sends the message to next in line.
+        * Sends `[ENCRYPTED_MESSAGE]` to `[IP]:[PORT]`
     * Third relay
         * Decrypts the message with it's private key.
         * `HTTP_GET_REQUEST https://www.google.com [CLIENT_PUBLIC_KEY]`
