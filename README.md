@@ -60,13 +60,38 @@ Relays interact with a trusted server to add itself to the network relay's list.
 
 Client flow to make an HTTP GET Request to `https://www.google.com`.
 
-1. `GET_RELAYS [N]` - Requesting TrustedServer for N relays.
-2. `RELAY [IP] [PORT] [PUBLIC_KEY]` - Getting back N relays, with their public keys. 
+1. Requesting TrustedServer for N relays.
+
+    ```
+    GET_RELAYS [N]
+    ```
+ 
+2. Getting back N relays, with their public keys.
+
+    ```
+    RELAY [IP] [PORT] [PUBLIC_KEY]
+    ```
+    
 3. Building a chain of relays (assuming N=3):
     * Clients generates a new RSA 4096 bit key-pair.
-    * Encrypting `HTTP_GET_REQUEST https://www.google.com [CLIENT_PUBLIC_KEY]` with the LAST in chain relay's public key.
-    * Encrypting `ROUTE [IP] [PORT] [PREVIOUSLY_ENCRYPTED_MESSAGE]` message with the middle relay's public key, with a route IP and PORT to let the relay know which one is the next relay.
-    * Encrypting `ROUTE [IP] [PORT] [PREVIOUSLY_ENCRYPTED_MESSAGE]` message with the first relay's public key, with a route IP and PORT to let the relay know which one is the next relay.
+    * Encrypting packet with the LAST in chain relay's public key.
+    
+      ```
+      HTTP_GET_REQUEST https://www.google.com [CLIENT_PUBLIC_KEY]
+      ```  
+        
+    * Encrypting packet with the middle relay's public key, with a route IP and PORT to let the relay know which one is the next relay.
+      
+      ```
+      ROUTE [IP] [PORT] [PREVIOUSLY_ENCRYPTED_MESSAGE]
+      ```
+    
+    * Encrypting packet with the first relay's public key, with a route IP and PORT to let the relay know which one is the next relay.
+    
+      ```
+      ROUTE [IP] [PORT] [PREVIOUSLY_ENCRYPTED_MESSAGE]
+      ```
+      
 4. Sending encrypted message to first relay in chain.
     * First relay 
         * Decrypts the message with it's private key.
@@ -83,6 +108,7 @@ Client flow to make an HTTP GET Request to `https://www.google.com`.
         * Encrypts the message with the `CLIENT_PUBLIC_KEY`.
         * Returns back the encrypted response.
 5. Encrypted message is being propagated back to the client.
+6. Client decrypts the message with it's private key.
     
     
 
