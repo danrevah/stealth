@@ -100,7 +100,7 @@ Client flow to make an HTTP GET Request to `https://www.google.com`.
         * Decrypts the message with it's private key.
           
           ```
-          ROUTE [IP] [PORT] [ENCRYPTED_MESSAGE]`
+          ROUTE [IP] [PORT] [ENCRYPTED_MESSAGE]
           ```
           
         * Sends `ENCRYPTED_MESSAGE` to `IP:PORT`
@@ -108,7 +108,7 @@ Client flow to make an HTTP GET Request to `https://www.google.com`.
         * Decrypts the message with it's private key.
         
           ```
-          ROUTE [IP] [PORT] [ENCRYPTED_MESSAGE]`
+          ROUTE [IP] [PORT] [ENCRYPTED_MESSAGE]
           ```
           
         * Sends `ENCRYPTED_MESSAGE` to `IP:PORT`
