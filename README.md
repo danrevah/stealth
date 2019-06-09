@@ -60,8 +60,8 @@ Relays interact with a trusted server to add itself to the network relay's list.
 
 Client flow to make an HTTP GET Request to `https://www.google.com`.
 
-1. "GET_RELAYS [N]" - Requesting TrustedServer for N relays.
-2. "RELAY [IP] [PORT] [PUBLIC_KEY]" - Getting back N relays, with their public keys. 
+1. `GET_RELAYS [N]` - Requesting TrustedServer for N relays.
+2. `RELAY [IP] [PORT] [PUBLIC_KEY]` - Getting back N relays, with their public keys. 
 3. Building a chain of relays (assuming N=3):
     * Clients generates a new RSA 4096 bit key-pair.
     * Encrypting `HTTP_GET_REQUEST https://www.google.com [CLIENT_PUBLIC_KEY]` with the LAST in chain relay's public key.
