@@ -16,7 +16,7 @@ Emulating an encrypted tunnel using relays (Based on TOR concept).
      - [Compile](#compile)   
      - [Run Tests](#run-tests)   
      - [Run](#run)   
- - [Conclusions of Pen-Test](#conclusions-of-pen-test)   
+ - [Conclusions of Penetration Tests](#conclusions-of-penetration-tests)   
  - [TODO](#todo)   
  
 ## Overview
@@ -127,7 +127,7 @@ $ mvn test
 $ ./bin/stealth 
 ```
 
-## Conclusions of Pen-Test
+## Conclusions of Penetration Tests
 
 1. MITM Trusted Server - Trusted server private key is contained in the compiled version of this project (Fix in TODO's #1 + #2).
  
