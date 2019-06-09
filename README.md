@@ -91,7 +91,7 @@ Client flow to make an HTTP GET Request to `https://www.google.com`.
 Setting up the app's.
 
 ### Configuration
-In `com/openu/security/tor/app/Services/Config.java` we should configure TrustedServer IP, PORT and PUBLIC_KEY.
+In `com/openu/security/stealth/app/Services/Config.java` we should configure TrustedServer IP, PORT and PUBLIC_KEY.
 This is hardcoded into the client & relays in order to prevent MITM attacks.
 
 ```java
