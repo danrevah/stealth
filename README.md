@@ -9,7 +9,7 @@ Emulating an encrypted tunnel using relays (Based on TOR concept).
     - [Client](#client)
     - [Trusted Server](#trusted-server)
  - [Examples](#examples)
- - [Example of a client request flow](#example-of-a-client-request-flow)
+ - [Client request flow](#client-request-flow)
  - [Setup](#setup)
      - [Configuration](#configuration)   
      - [Install](#install)   
@@ -56,7 +56,7 @@ Relays interact with a trusted server to add itself to the network relay's list.
   <img width="690" height="450" src="docs/gifs/relay.gif">
 </p>
 
-## Example of a client request flow
+## Client request flow
 
 Client flow to make an HTTP GET Request to `https://www.google.com`.
 
