@@ -70,6 +70,9 @@ Client flow to make an HTTP GET Request to `https://www.google.com`.
 
     ```
     RELAY [IP] [PORT] [PUBLIC_KEY]
+    RELAY [IP] [PORT] [PUBLIC_KEY]
+    ...
+    RELAY [IP] [PORT] [PUBLIC_KEY]
     ```
     
 3. Building a chain of relays (assuming N=3):
