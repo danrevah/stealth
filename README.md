@@ -98,15 +98,27 @@ Client flow to make an HTTP GET Request to `https://www.google.com`.
 4. Sending encrypted message to first relay in chain.
     * First relay 
         * Decrypts the message with it's private key.
-        * `ROUTE [IP] [PORT] [ENCRYPTED_MESSAGE]`
+          
+          ```
+          ROUTE [IP] [PORT] [ENCRYPTED_MESSAGE]`
+          ```
+          
         * Sends `[ENCRYPTED_MESSAGE]` to `[IP]:[PORT]`
     * Second relay 
         * Decrypts the message with it's private key.
-        * `ROUTE [IP] [PORT] [ENCRYPTED_MESSAGE]`
+        
+          ```
+          ROUTE [IP] [PORT] [ENCRYPTED_MESSAGE]`
+          ```
+          
         * Sends `[ENCRYPTED_MESSAGE]` to `[IP]:[PORT]`
     * Third relay
         * Decrypts the message with it's private key.
-        * `HTTP_GET_REQUEST https://www.google.com [CLIENT_PUBLIC_KEY]`
+        
+          ```
+          HTTP_GET_REQUEST https://www.google.com [CLIENT_PUBLIC_KEY]
+          ```
+          
         * Makes an HTTP GET request to the requested url.
         * Encrypts the message with the `CLIENT_PUBLIC_KEY`.
         * Returns back the encrypted response.
