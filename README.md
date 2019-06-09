@@ -65,8 +65,8 @@ Client flow to make an HTTP GET Request to `https://www.google.com`.
 3. Building a chain of relays (assuming N=3):
     * Clients generates a new RSA 4096 bit key-pair.
     * Encrypting `HTTP_GET_REQUEST https://www.google.com [CLIENT_PUBLIC_KEY]` with the LAST in chain relay's public key.
-    * Encrypting `ROUTE [IP] [PORT] [PREVIOUSLY_ENCRYPTED_MESSAGE]` - Encrypting message with the middle relay's public key, with a route IP and PORT to let the relay know which one is the next relay.
-    * Encrypting `ROUTE [IP] [PORT] [PREVIOUSLY_ENCRYPTED_MESSAGE]` - Encrypting message with the first relay's public key, with a route IP and PORT to let the relay know which one is the next relay.
+    * Encrypting `ROUTE [IP] [PORT] [PREVIOUSLY_ENCRYPTED_MESSAGE]` - message with the middle relay's public key, with a route IP and PORT to let the relay know which one is the next relay.
+    * Encrypting `ROUTE [IP] [PORT] [PREVIOUSLY_ENCRYPTED_MESSAGE]` - message with the first relay's public key, with a route IP and PORT to let the relay know which one is the next relay.
 4. Sending encrypted message to first relay in chain.
     * First relay 
         * Decrypts the message with it's private key.
