@@ -15,8 +15,6 @@ import java.util.List;
  *  ...
  *  N. ROUTE [IP] [PORT] [ENC_MESSAGE of N-1]
  *
- * @TODO: Exit relay should digitally sign the response making the client sure it hasn't been spoofed
- *
  * Scenarios:
  *  1. Relay receives a ROUTE request and sends the ENC_MESSAGE next to the specified IP and PORT.
  *     Waiting for response and transferring it back to previous relay.

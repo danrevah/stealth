@@ -37,7 +37,6 @@ public class Client implements Service {
     public Client(int chainLength) throws Exception {
         this.chainLength = chainLength;
         this.keyPairs = new KeyPairs();
-        this.keyPairs.generateKeyPair();
         this.clientSocket = new ClientSocket(Config.TRUSTED_SERVER_HOST, Config.TRUSTED_SERVER_PORT, this.keyPairs,
                 KeyHelper.base64ToPublicKey(Config.TRUSTED_SERVER_PUBLIC_KEY));
         this.scanner = new Scanner(System.in);
@@ -59,9 +58,13 @@ public class Client implements Service {
                 continue;
             }
 
-            // Send get Relays
+            // Regenerate key-pair each request (protection against spoofing)
+            this.keyPairs.generateKeyPair();
+
+            // Send "Get Relays" request to TrustedServer
             this.clientSocket.getRelays(chainLength, keyPairs.getPublicKey());
 
+            // Building a chain of encryption's
             ChainedResponse chain = ChainedEncryption.chain(chainLength, "HTTP_GET_REQUEST " + input + " "
                     + KeyHelper.publicKeyToBase64(keyPairs.getPublicKey()));
 

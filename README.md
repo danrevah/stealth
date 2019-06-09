@@ -2,6 +2,22 @@
 
 Emulating an encrypted tunnel using relays (Based on TOR concept).
 
+## Table of contents
+
+ - [Overview](#overview)
+    - [Relay](#relay)
+    - [Client](#client)
+    - [Trusted Server](#trusted-server)
+ - [Examples](#examples)
+ - [Setup](#setup)
+     - [Configuration](#configuration)   
+     - [Install](#install)   
+     - [Compile](#compile)   
+     - [Run Tests](#run-tests)   
+     - [Run](#run)   
+ - [Conclusions of Pen-Test](#conclusions-of-pen-test)   
+ - [TODO](#todo)   
+ 
 ## Overview
 
 The project is separated to 3 applications:
@@ -39,8 +55,11 @@ Relays interact with a trusted server to add itself to the network relay's list.
   <img width="690" height="450" src="docs/gifs/relay.gif">
 </p>
 
+## Setup
 
-## Configuration
+Setting up the app's.
+
+### Configuration
 In `com/openu/security/tor/app/Services/Config.java` we should configure TrustedServer IP, PORT and PUBLIC_KEY.
 This is hardcoded into the client & relays in order to prevent MITM attacks.
 
@@ -53,25 +72,25 @@ public class Config {
 }
 
 ```
-## Install
+### Install
 
 ```sh 
 $ mvn install
 ```
 
-## Compile
+### Compile
 
 ```sh 
 $ mvn clean compile assembly:single
 ```
 
-## Run tests
+### Run tests
 
 ```sh 
 $ mvn test
 ```
 
-## Run
+### Run
 
 ```sh 
 $ ./bin/proxy 
