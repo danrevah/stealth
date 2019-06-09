@@ -54,7 +54,7 @@
           <configuration>
             <archive>
               <manifest>
-                <mainClass>com.openu.security.tor.app.App</mainClass>
+                <mainClass>com.openu.security.stealth.app.App</mainClass>
               </manifest>
             </archive>
             <descriptorRefs>
@@ -88,7 +88,7 @@
               <manifest>
                 <addClasspath>true</addClasspath>
                 <classpathPrefix>lib/</classpathPrefix>
-                <mainClass>com.openu.security.tor.app.App</mainClass>
+                <mainClass>com.openu.security.stealth.app.App</mainClass>
               </manifest>
             </archive>
           </configuration>
