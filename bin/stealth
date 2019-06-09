@@ -1,0 +1,3 @@
+#!/bin/sh
+args="$*"
+java -jar target/encrypted-proxy-1.0-SNAPSHOT-jar-with-dependencies.jar $args

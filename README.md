@@ -124,7 +124,7 @@ $ mvn test
 ### Run
 
 ```sh 
-$ ./bin/proxy 
+$ ./bin/stealth 
 ```
 
 ## Conclusions of Pen-Test
