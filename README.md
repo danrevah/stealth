@@ -60,7 +60,7 @@ Relays interact with a trusted server to add itself to the network relay's list.
 
 Client flow to make an HTTP GET Request to `https://www.google.com`.
 
-1. Client generates a new key-pair.
+1. Clients generates a new RSA 4096 bit key-pair.
 2. Requesting TrustedServer for N relays.
 
     ```
