@@ -13,4 +13,8 @@ public class Database {
     public static synchronized ArrayList<ServerDetails> getRelays() {
         return relays;
     }
+
+    public static synchronized void resetRelays() {
+        relays = new ArrayList<>();
+    }
 }

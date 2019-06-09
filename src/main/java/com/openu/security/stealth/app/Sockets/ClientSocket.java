@@ -43,6 +43,9 @@ public class ClientSocket {
 
         String relaysPacket = this.send(packet, true, true);
 
+        // clear old relays from list..
+        Database.resetRelays();
+
         for (String row : relaysPacket.split("\n")) {
             String[] splitted = row.split(" ");
 
