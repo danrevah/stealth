@@ -21,7 +21,7 @@ Emulating an encrypted tunnel using relays (Based on TOR concept).
  
 ## Overview
 
-The project is separated to 3 applications:
+The project is separated to 3 applications.
 
 ### Relay
 Relay is where the traffic passes through before reaching it destination.
