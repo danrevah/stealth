@@ -194,3 +194,5 @@ Since the private-key is hardcoded and the client and relay jar's should not hav
 
 5. TrustedServer should check, before adding a new relay, if there's already a relay with the same IP, if so he should handle this scneario (remove old, add new).
 
+6. Instead of passing the users RSA-4096 public key to the last node (that encrypts the returned data from the server), it's better that the client will generate a AES-256 key, to improve perfomance. 
+
