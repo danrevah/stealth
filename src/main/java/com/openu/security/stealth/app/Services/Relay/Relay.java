@@ -21,8 +21,8 @@ import com.openu.security.stealth.app.Sockets.ListenerSocket;
  *  - 6.1.1. Sending the [ENC_MESSAGE] to [IP]:[PORT] (next relay in line)
  *  - 6.2. IF (EncryptedPacket = 'HTTP_GET_REQUEST [URL] [CLIENT_PUBLIC_KEY]')
  *  - 6.2.1. Sending HTTP Get request to [URL]
- *  - 6.2.2. Encrypted response with [CLIENT_PUBLIC_KEY]
- *  - 6.2.3. Returning encrypted response to previous connection (relay).
+ *  - 6.2.2. Encrypting the response with [CLIENT_PUBLIC_KEY]
+ *  - 6.2.3. And returns the encrypted data to the previous relay.
  */
 public class Relay implements Service {
 
