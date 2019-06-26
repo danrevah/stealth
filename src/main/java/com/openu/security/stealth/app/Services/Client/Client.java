@@ -21,11 +21,12 @@ import java.util.Scanner;
  *  - 2. Getting a list of Relay's from the TrustedServer
  *  - 3. Randomly building a relay chain
  *  - 4. Encrypting GET Request, so that only the exit relay could read.
- *  - 5. Using each relay is adding another stage to the encryption,
- *       which means each relay only knows the next relay in line,
- *       but is un-aware of the length of the route.
+ *  - 5. Each relay is adding an additional encryption layer,
+ *       which means a relay only knows the next relay in chain,
+ *       but is unaware of the length of the route, 
+ *       or the message itself (unless it's the exit relay).
  *  - 6. Send chained encrypted packet to first relay
- *  - 7. Waiting for response - decrypting with publicKey.
+ *  - 7. Waiting for response and decrypting with the private key.
  */
 public class Client implements Service {
 
