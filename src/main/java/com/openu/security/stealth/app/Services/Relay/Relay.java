@@ -12,8 +12,8 @@ import com.openu.security.stealth.app.Sockets.ListenerSocket;
  *
  * Relay application
  *  - 1. Listening to port for incoming connections
- *  - 2. Connecting and adding himself to the TrustedServer relay's list
- *  - 3. Sending the port the Relay is listening to -> to the TrustedServer
+ *  - 2. Connecting and adding itself to the TrustedServer relay's list
+ *  - 3. Sending the port number that the Relay have started listening to (to the TrustedServer)
  *  - 4. Waiting for incoming connections (from client OR other relays).
  *  - 5. Incoming connection
  *  - 6. EncryptedPacket is being decrypted by relays private key
