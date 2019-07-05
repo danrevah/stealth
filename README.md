@@ -2,7 +2,7 @@
 
 Emulating an encrypted tunnel using relays (Based on TOR concept).
 
-> This project was made as part of a major degree cyber-security course at the Israeli OpenU.
+> This project was made as part of a M.Sc degree cyber-security course at the Israeli OpenU.
 
 ## Table of contents
 
